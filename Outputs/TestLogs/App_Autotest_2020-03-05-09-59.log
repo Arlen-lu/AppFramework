@@ -1,0 +1,280 @@
+ Thu, 05 Mar 2020 09:59:02  INFO logger.py <module> [ line:20 ] hehehehe
+ Thu, 05 Mar 2020 09:59:02  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Thu, 05 Mar 2020 09:59:02  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Thu, 05 Mar 2020 09:59:31  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 09:59:31  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.5758066177368164s
+ Thu, 05 Mar 2020 09:59:31  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.0695943832397461s
+ Thu, 05 Mar 2020 09:59:31  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 09:59:32  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 09:59:32  INFO test_0_login.py test_prepare [ line:22 ] app未登录,开始执行用例!
+ Thu, 05 Mar 2020 09:59:44  INFO test_0_login.py test_login_success [ line:48 ] 成功登录用例
+ Thu, 05 Mar 2020 09:59:44  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 09:59:46  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时1.5325684547424316s
+ Thu, 05 Mar 2020 09:59:46  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.06636857986450195s
+ Thu, 05 Mar 2020 09:59:46  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 09:59:46  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 09:59:47  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.9879858493804932s
+ Thu, 05 Mar 2020 09:59:48  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.0467805862426758s
+ Thu, 05 Mar 2020 09:59:49  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 09:59:49  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入18684720553
+ Thu, 05 Mar 2020 09:59:50  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8040661811828613s
+ Thu, 05 Mar 2020 09:59:50  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 09:59:50  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 09:59:52  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时2.67331600189209s
+ Thu, 05 Mar 2020 09:59:52  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时0.04099392890930176s
+ Thu, 05 Mar 2020 09:59:52  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功！
+ Thu, 05 Mar 2020 09:59:53  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')成功输入python
+ Thu, 05 Mar 2020 09:59:54  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8491597175598145s
+ Thu, 05 Mar 2020 09:59:54  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 09:59:54  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 09:59:58  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')查找成功，耗时2.6413910388946533s
+ Thu, 05 Mar 2020 09:59:59  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')查找成功！
+ Thu, 05 Mar 2020 09:59:59  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')成功点击!
+ Thu, 05 Mar 2020 10:00:01  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:00:02  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时1.1178560256958008s
+ Thu, 05 Mar 2020 10:00:02  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.06344008445739746s
+ Thu, 05 Mar 2020 10:00:02  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:00:03  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:00:05  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:00:05  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.06728863716125488s
+ Thu, 05 Mar 2020 10:00:05  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.058560848236083984s
+ Thu, 05 Mar 2020 10:00:05  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:00:07  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:00:07  INFO test_0_login.py test_login_success [ line:59 ] 确认登录成功!
+ Thu, 05 Mar 2020 10:00:21  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:00:22  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.6080451011657715s
+ Thu, 05 Mar 2020 10:00:22  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.06734466552734375s
+ Thu, 05 Mar 2020 10:00:22  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:00:24  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:00:24  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面项目
+ Thu, 05 Mar 2020 10:00:24  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.06637001037597656s
+ Thu, 05 Mar 2020 10:00:25  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.07027220726013184s
+ Thu, 05 Mar 2020 10:00:25  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功！
+ Thu, 05 Mar 2020 10:00:25  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')成功点击!
+ Thu, 05 Mar 2020 10:00:27  INFO basepage.py get_eles [ line:59 ] 元素集合('id', 'com.xxzb.fenwoo:id/pbar_process')查找成功!
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功，耗时2.5316967964172363s
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功！
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')得text属性为剩余 7天9时18分
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功，耗时0.09955215454101562s
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功！
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')得text属性为8%
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功，耗时0.2629363536834717s
+ Thu, 05 Mar 2020 10:00:30  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功！
+ Thu, 05 Mar 2020 10:00:31  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')成功输入0
+ Thu, 05 Mar 2020 10:00:32  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功，耗时0.5207521915435791s
+ Thu, 05 Mar 2020 10:00:32  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功！
+ Thu, 05 Mar 2020 10:00:32  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')成功点击!
+ Thu, 05 Mar 2020 10:00:53  INFO basepage.py imgs_screenshot [ line:119 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-10-00-53.png
+ Thu, 05 Mar 2020 10:00:53  ERROR basepage.py visiable_ele [ line:41 ] 元素('xpath', "//*[@text='最小投资金额为:100.0']")未找到
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:00:53  ERROR test_1_invest.py test_invest_worng [ line:47 ] Test Fail!
+Traceback (most recent call last):
+  File "D:\python\mystudy\AppFramework\TestCases\test_1_invest.py", line 38, in test_invest_worng
+    assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas['msg']
+  File "d:\python\mystudy\AppFramework\PageObjects\projectspage.py", line 59, in get_details_toast_0
+    return self.get_ele_attr(loc.details_toast_0_loc,'text')
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 102, in get_ele_attr
+    ele = self.get_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 45, in get_ele
+    self.visiable_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 42, in visiable_ele
+    raise e
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:01:08  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:01:09  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时1.4581444263458252s
+ Thu, 05 Mar 2020 10:01:09  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.12199997901916504s
+ Thu, 05 Mar 2020 10:01:09  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:01:10  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:01:10  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面项目
+ Thu, 05 Mar 2020 10:01:12  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时1.5752995014190674s
+ Thu, 05 Mar 2020 10:01:12  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.07515263557434082s
+ Thu, 05 Mar 2020 10:01:12  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功！
+ Thu, 05 Mar 2020 10:01:12  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')成功点击!
+ Thu, 05 Mar 2020 10:01:14  INFO basepage.py get_eles [ line:59 ] 元素集合('id', 'com.xxzb.fenwoo:id/pbar_process')查找成功!
+ Thu, 05 Mar 2020 10:01:16  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功，耗时1.8295023441314697s
+ Thu, 05 Mar 2020 10:01:16  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功！
+ Thu, 05 Mar 2020 10:01:16  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')得text属性为剩余 7天9时18分
+ Thu, 05 Mar 2020 10:01:16  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功，耗时0.11907291412353516s
+ Thu, 05 Mar 2020 10:01:16  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功！
+ Thu, 05 Mar 2020 10:01:16  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')得text属性为8%
+ Thu, 05 Mar 2020 10:01:17  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功，耗时0.2547340393066406s
+ Thu, 05 Mar 2020 10:01:17  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功！
+ Thu, 05 Mar 2020 10:01:17  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')成功输入15
+ Thu, 05 Mar 2020 10:01:18  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功，耗时0.7509996891021729s
+ Thu, 05 Mar 2020 10:01:18  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功！
+ Thu, 05 Mar 2020 10:01:19  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')成功点击!
+ Thu, 05 Mar 2020 10:01:40  INFO basepage.py imgs_screenshot [ line:119 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-10-01-39.png
+ Thu, 05 Mar 2020 10:01:40  ERROR basepage.py visiable_ele [ line:41 ] 元素('xpath', "//*[@text='投资金额必须为100的整数倍']")未找到
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:01:40  ERROR test_1_invest.py test_invest_worng [ line:47 ] Test Fail!
+Traceback (most recent call last):
+  File "D:\python\mystudy\AppFramework\TestCases\test_1_invest.py", line 41, in test_invest_worng
+    assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas['msg']
+  File "d:\python\mystudy\AppFramework\PageObjects\projectspage.py", line 62, in get_details_toast_1
+    return self.get_ele_attr(loc.details_toast_1_loc,'text')
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 102, in get_ele_attr
+    ele = self.get_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 45, in get_ele
+    self.visiable_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 42, in visiable_ele
+    raise e
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:01:55  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:01:56  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时1.3254058361053467s
+ Thu, 05 Mar 2020 10:01:57  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.09467315673828125s
+ Thu, 05 Mar 2020 10:01:57  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:01:58  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:01:58  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面项目
+ Thu, 05 Mar 2020 10:01:59  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时1.6416122913360596s
+ Thu, 05 Mar 2020 10:01:59  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.06734371185302734s
+ Thu, 05 Mar 2020 10:01:59  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功！
+ Thu, 05 Mar 2020 10:02:00  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')成功点击!
+ Thu, 05 Mar 2020 10:02:02  INFO basepage.py get_eles [ line:59 ] 元素集合('id', 'com.xxzb.fenwoo:id/pbar_process')查找成功!
+ Thu, 05 Mar 2020 10:02:04  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功，耗时2.5479507446289062s
+ Thu, 05 Mar 2020 10:02:04  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功！
+ Thu, 05 Mar 2020 10:02:04  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')得text属性为剩余 7天9时17分
+ Thu, 05 Mar 2020 10:02:05  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功，耗时0.06784749031066895s
+ Thu, 05 Mar 2020 10:02:05  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功！
+ Thu, 05 Mar 2020 10:02:05  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')得text属性为8%
+ Thu, 05 Mar 2020 10:02:05  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功，耗时0.24357032775878906s
+ Thu, 05 Mar 2020 10:02:05  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功！
+ Thu, 05 Mar 2020 10:02:06  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')成功输入88000000
+ Thu, 05 Mar 2020 10:02:06  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功，耗时0.637408971786499s
+ Thu, 05 Mar 2020 10:02:07  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功！
+ Thu, 05 Mar 2020 10:02:07  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')成功点击!
+ Thu, 05 Mar 2020 10:02:28  INFO basepage.py imgs_screenshot [ line:119 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-10-02-27.png
+ Thu, 05 Mar 2020 10:02:28  ERROR basepage.py visiable_ele [ line:41 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')未找到
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:02:28  ERROR test_1_invest.py test_invest_worng [ line:47 ] Test Fail!
+Traceback (most recent call last):
+  File "D:\python\mystudy\AppFramework\TestCases\test_1_invest.py", line 43, in test_invest_worng
+    elif testdatas['ammount'] >ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas['ammount']>ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():
+  File "d:\python\mystudy\AppFramework\PageObjects\projectspage.py", line 32, in get_details_input_remain_money
+    return self.get_ele_attr(loc.details_input_remain_money_loc,'text')
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 102, in get_ele_attr
+    ele = self.get_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 45, in get_ele
+    self.visiable_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 42, in visiable_ele
+    raise e
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:02:42  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:02:43  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时1.0101594924926758s
+ Thu, 05 Mar 2020 10:02:43  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.09174180030822754s
+ Thu, 05 Mar 2020 10:02:43  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:02:44  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:02:44  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面项目
+ Thu, 05 Mar 2020 10:02:45  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.9834995269775391s
+ Thu, 05 Mar 2020 10:02:45  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.07515311241149902s
+ Thu, 05 Mar 2020 10:02:45  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功！
+ Thu, 05 Mar 2020 10:02:46  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')成功点击!
+ Thu, 05 Mar 2020 10:02:47  INFO basepage.py get_eles [ line:59 ] 元素集合('id', 'com.xxzb.fenwoo:id/pbar_process')查找成功!
+ Thu, 05 Mar 2020 10:02:50  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功，耗时2.0716140270233154s
+ Thu, 05 Mar 2020 10:02:50  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功！
+ Thu, 05 Mar 2020 10:02:50  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')得text属性为剩余 7天9时16分
+ Thu, 05 Mar 2020 10:02:50  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功，耗时0.21879148483276367s
+ Thu, 05 Mar 2020 10:02:51  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功！
+ Thu, 05 Mar 2020 10:02:51  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')得text属性为8%
+ Thu, 05 Mar 2020 10:02:51  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功，耗时0.2411208152770996s
+ Thu, 05 Mar 2020 10:02:51  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功！
+ Thu, 05 Mar 2020 10:02:51  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')成功输入99999999900
+ Thu, 05 Mar 2020 10:02:53  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功，耗时1.2497825622558594s
+ Thu, 05 Mar 2020 10:02:53  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功！
+ Thu, 05 Mar 2020 10:02:53  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')成功点击!
+ Thu, 05 Mar 2020 10:03:14  INFO basepage.py imgs_screenshot [ line:119 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-10-03-13.png
+ Thu, 05 Mar 2020 10:03:14  ERROR basepage.py visiable_ele [ line:41 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')未找到
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:03:14  ERROR test_1_invest.py test_invest_worng [ line:47 ] Test Fail!
+Traceback (most recent call last):
+  File "D:\python\mystudy\AppFramework\TestCases\test_1_invest.py", line 43, in test_invest_worng
+    elif testdatas['ammount'] >ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas['ammount']>ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():
+  File "d:\python\mystudy\AppFramework\PageObjects\projectspage.py", line 32, in get_details_input_remain_money
+    return self.get_ele_attr(loc.details_input_remain_money_loc,'text')
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 102, in get_ele_attr
+    ele = self.get_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 45, in get_ele
+    self.visiable_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 42, in visiable_ele
+    raise e
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:03:28  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:03:29  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时1.8329200744628906s
+ Thu, 05 Mar 2020 10:03:29  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.09271979331970215s
+ Thu, 05 Mar 2020 10:03:30  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:03:30  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:03:30  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面项目
+ Thu, 05 Mar 2020 10:03:31  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.8371219635009766s
+ Thu, 05 Mar 2020 10:03:31  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.058561086654663086s
+ Thu, 05 Mar 2020 10:03:31  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功！
+ Thu, 05 Mar 2020 10:03:32  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')成功点击!
+ Thu, 05 Mar 2020 10:03:33  INFO basepage.py get_eles [ line:59 ] 元素集合('id', 'com.xxzb.fenwoo:id/pbar_process')查找成功!
+ Thu, 05 Mar 2020 10:03:35  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功，耗时0.11468029022216797s
+ Thu, 05 Mar 2020 10:03:35  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功！
+ Thu, 05 Mar 2020 10:03:35  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')得text属性为剩余 7天9时15分
+ Thu, 05 Mar 2020 10:03:35  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功，耗时0.11372089385986328s
+ Thu, 05 Mar 2020 10:03:36  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功！
+ Thu, 05 Mar 2020 10:03:36  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')得text属性为8%
+ Thu, 05 Mar 2020 10:03:36  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功，耗时0.30158257484436035s
+ Thu, 05 Mar 2020 10:03:36  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功！
+ Thu, 05 Mar 2020 10:03:36  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')成功输入100
+ Thu, 05 Mar 2020 10:03:37  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功，耗时0.8051989078521729s
+ Thu, 05 Mar 2020 10:03:37  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功！
+ Thu, 05 Mar 2020 10:03:37  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')成功点击!
+ Thu, 05 Mar 2020 10:03:39  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_title')查找成功，耗时1.5816624164581299s
+ Thu, 05 Mar 2020 10:03:39  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/tv_title')查找成功！
+ Thu, 05 Mar 2020 10:03:39  INFO basepage.py get_ele_attr [ line:105 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_title')得text属性为手机号码
+ Thu, 05 Mar 2020 10:03:39  ERROR test_1_invest.py test_invest_success [ line:74 ] 投资失败!
+Traceback (most recent call last):
+  File "D:\python\mystudy\AppFramework\TestCases\test_1_invest.py", line 71, in test_invest_success
+    assert ProjectsPage(init_keep,init_session,name).get_popbox_invest_success() ==testdatas['msg']
+AssertionError: assert '手机号码' == '投资成功'
+  - 手机号码
+  + 投资成功

@@ -1,0 +1,28 @@
+#配置使用android得信息
+inuse:
+  platform: Emulator_9
+  apk_name: future
+  server_port: 4723
+#android信息
+Emulator_9:
+  platformName: Android
+  platformVersion: 9.0
+  deviceName: Android Emulator
+  automationName: Appium
+  noReset: True
+
+HONOR_ATH:
+  platformName: Android
+  platformVersion: 6.0.1
+  deviceName: 69T7N16C02000810
+  automationName: Appium
+  noReset: True
+
+#app信息
+future:
+  appPackage: 'com.xxzb.fenwoo'
+  appActivity: 'com.xxzb.fenwoo.activity.addition.WelcomeActivity'
+
+  
+
+

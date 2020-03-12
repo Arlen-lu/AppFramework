@@ -1,0 +1,85 @@
+ Thu, 05 Mar 2020 10:21:19  INFO logger.py <module> [ line:20 ] hehehehe
+ Thu, 05 Mar 2020 10:21:19  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Thu, 05 Mar 2020 10:21:20  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Thu, 05 Mar 2020 10:21:32  INFO test_0_login.py test_login_success [ line:48 ] 成功登录用例
+ Thu, 05 Mar 2020 10:21:32  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 10:21:34  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时2.0935165882110596s
+ Thu, 05 Mar 2020 10:21:34  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.08198213577270508s
+ Thu, 05 Mar 2020 10:21:34  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 10:21:35  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 10:21:36  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.9960253238677979s
+ Thu, 05 Mar 2020 10:21:36  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.04879951477050781s
+ Thu, 05 Mar 2020 10:21:36  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 10:21:37  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入18684720553
+ Thu, 05 Mar 2020 10:21:37  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8321566581726074s
+ Thu, 05 Mar 2020 10:21:37  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 10:21:37  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 10:21:39  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时1.884178876876831s
+ Thu, 05 Mar 2020 10:21:39  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时0.07515168190002441s
+ Thu, 05 Mar 2020 10:21:39  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功！
+ Thu, 05 Mar 2020 10:21:40  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')成功输入python
+ Thu, 05 Mar 2020 10:21:41  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8346266746520996s
+ Thu, 05 Mar 2020 10:21:41  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 10:21:41  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 10:22:04  INFO basepage.py imgs_screenshot [ line:119 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\成功登录-2020-03-05-10-22-03.png
+ Thu, 05 Mar 2020 10:22:04  ERROR basepage.py visiable_ele [ line:41 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')未找到
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:22:15  INFO test_0_login.py test_login_success [ line:48 ] 成功登录用例
+ Thu, 05 Mar 2020 10:22:15  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 10:22:17  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时1.8251163959503174s
+ Thu, 05 Mar 2020 10:22:17  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.07027411460876465s
+ Thu, 05 Mar 2020 10:22:17  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 10:22:18  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 10:22:19  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.42562055587768555s
+ Thu, 05 Mar 2020 10:22:19  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.04442930221557617s
+ Thu, 05 Mar 2020 10:22:19  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 10:22:20  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入18684720553
+ Thu, 05 Mar 2020 10:22:20  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8591270446777344s
+ Thu, 05 Mar 2020 10:22:20  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 10:22:20  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 10:22:23  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时2.3412981033325195s
+ Thu, 05 Mar 2020 10:22:23  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时0.05368661880493164s
+ Thu, 05 Mar 2020 10:22:23  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功！
+ Thu, 05 Mar 2020 10:22:24  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')成功输入python
+ Thu, 05 Mar 2020 10:22:25  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8569259643554688s
+ Thu, 05 Mar 2020 10:22:25  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 10:22:25  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 10:22:47  INFO basepage.py imgs_screenshot [ line:119 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\成功登录-2020-03-05-10-22-47.png
+ Thu, 05 Mar 2020 10:22:47  ERROR basepage.py visiable_ele [ line:41 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')未找到
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Thu, 05 Mar 2020 10:22:59  INFO test_0_login.py test_login_success [ line:48 ] 成功登录用例
+ Thu, 05 Mar 2020 10:22:59  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 10:23:01  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时1.9627330303192139s
+ Thu, 05 Mar 2020 10:23:01  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.07710504531860352s
+ Thu, 05 Mar 2020 10:23:01  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 10:23:02  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 10:23:03  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.0696783065795898s
+ Thu, 05 Mar 2020 10:23:03  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.06246328353881836s
+ Thu, 05 Mar 2020 10:23:03  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 10:23:04  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入18684720553
+ Thu, 05 Mar 2020 10:23:05  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.846215009689331s
+ Thu, 05 Mar 2020 10:23:05  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 10:23:05  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 10:23:07  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时1.9330081939697266s
+ Thu, 05 Mar 2020 10:23:07  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时0.04782462120056152s
+ Thu, 05 Mar 2020 10:23:07  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功！
+ Thu, 05 Mar 2020 10:23:07  INFO basepage.py input_ele_text [ line:73 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')成功输入python
+ Thu, 05 Mar 2020 10:23:08  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8379120826721191s
+ Thu, 05 Mar 2020 10:23:08  INFO basepage.py get_ele [ line:48 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 10:23:08  INFO basepage.py click_ele [ line:94 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!

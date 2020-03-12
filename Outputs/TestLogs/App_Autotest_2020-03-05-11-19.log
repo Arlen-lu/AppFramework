@@ -1,0 +1,40 @@
+ Thu, 05 Mar 2020 11:19:45  INFO logger.py <module> [ line:20 ] hehehehe
+ Thu, 05 Mar 2020 11:19:45  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Thu, 05 Mar 2020 11:19:46  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Thu, 05 Mar 2020 11:20:03  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 11:20:04  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.9525761604309082s
+ Thu, 05 Mar 2020 11:20:04  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.09369635581970215s
+ Thu, 05 Mar 2020 11:20:04  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 11:20:06  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 11:20:06  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面项目
+ Thu, 05 Mar 2020 11:20:06  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.07124876976013184s
+ Thu, 05 Mar 2020 11:20:06  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功，耗时0.07515215873718262s
+ Thu, 05 Mar 2020 11:20:06  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')查找成功！
+ Thu, 05 Mar 2020 11:20:07  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("项目")')成功点击!
+ Thu, 05 Mar 2020 11:20:09  INFO basepage.py get_eles [ line:67 ] 元素集合('id', 'com.xxzb.fenwoo:id/pbar_process')查找成功!
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功，耗时3.2576985359191895s
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')查找成功！
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_bidremain')得text属性为剩余 7天7时59分
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功，耗时0.11711812019348145s
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')查找成功！
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_remaintime')得text属性为8%
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功，耗时0.25376009941101074s
+ Thu, 05 Mar 2020 11:20:13  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')查找成功！
+ Thu, 05 Mar 2020 11:20:14  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_investamount')成功输入100
+ Thu, 05 Mar 2020 11:20:15  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功，耗时0.5207865238189697s
+ Thu, 05 Mar 2020 11:20:15  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')查找成功！
+ Thu, 05 Mar 2020 11:20:15  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_investnow')成功点击!
+ Thu, 05 Mar 2020 11:20:17  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_title')查找成功，耗时1.5799641609191895s
+ Thu, 05 Mar 2020 11:20:17  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_title')查找成功！
+ Thu, 05 Mar 2020 11:20:17  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_title')得text属性为手机号码
+ Thu, 05 Mar 2020 11:20:17  ERROR test_1_invest.py test_invest_success [ line:75 ] 投资失败!
+Traceback (most recent call last):
+  File "D:\python\mystudy\AppFramework\TestCases\test_1_invest.py", line 72, in test_invest_success
+    assert ProjectsPage(init_keep,init_session,name).get_popbox_invest_success() ==testdatas['msg']
+AssertionError: assert '手机号码' == '投资成功'
+  - 手机号码
+  + 投资成功

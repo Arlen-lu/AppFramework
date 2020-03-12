@@ -1,0 +1,22 @@
+ Thu, 05 Mar 2020 10:12:19  INFO logger.py <module> [ line:20 ] hehehehe
+ Thu, 05 Mar 2020 10:12:19  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Thu, 05 Mar 2020 10:12:19  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Thu, 05 Mar 2020 10:12:34  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:12:34  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.5936450958251953s
+ Thu, 05 Mar 2020 10:12:34  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.07612729072570801s
+ Thu, 05 Mar 2020 10:12:34  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:12:37  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:12:51  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:12:51  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.563152551651001s
+ Thu, 05 Mar 2020 10:12:51  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.05953693389892578s
+ Thu, 05 Mar 2020 10:12:51  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:12:54  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 10:13:08  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 10:13:09  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.8696141242980957s
+ Thu, 05 Mar 2020 10:13:09  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.06539201736450195s
+ Thu, 05 Mar 2020 10:13:09  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 10:13:12  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!

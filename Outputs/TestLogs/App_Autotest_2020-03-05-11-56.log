@@ -1,0 +1,299 @@
+ Thu, 05 Mar 2020 11:56:16  INFO logger.py <module> [ line:20 ] hehehehe
+ Thu, 05 Mar 2020 11:56:16  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Thu, 05 Mar 2020 11:56:17  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Thu, 05 Mar 2020 11:56:47  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 11:56:47  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.5842113494873047s
+ Thu, 05 Mar 2020 11:56:49  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时1.2073240280151367s
+ Thu, 05 Mar 2020 11:56:49  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 11:56:52  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 11:56:52  INFO test_0_login.py test_prepare [ line:22 ] app未登录,开始执行用例!
+ Thu, 05 Mar 2020 11:57:05  INFO test_0_login.py test_login_tele_wrong [ line:30 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 11:57:05  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 11:57:07  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时2.3809738159179688s
+ Thu, 05 Mar 2020 11:57:08  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.09076738357543945s
+ Thu, 05 Mar 2020 11:57:08  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 11:57:09  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 11:57:10  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.0248730182647705s
+ Thu, 05 Mar 2020 11:57:11  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.9067022800445557s
+ Thu, 05 Mar 2020 11:57:11  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 11:57:12  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入 
+ Thu, 05 Mar 2020 11:57:13  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8438124656677246s
+ Thu, 05 Mar 2020 11:57:13  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 11:57:13  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 11:57:15  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.05852317810058594s
+ Thu, 05 Mar 2020 11:57:15  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 11:57:16  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 11:57:16  INFO test_0_login.py test_login_tele_wrong [ line:37 ] Test Pass!
+ Thu, 05 Mar 2020 11:57:16  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.04099106788635254s
+ Thu, 05 Mar 2020 11:57:16  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 11:57:16  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 11:57:33  INFO test_0_login.py test_login_tele_wrong [ line:30 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 11:57:33  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 11:57:36  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时2.432502269744873s
+ Thu, 05 Mar 2020 11:57:36  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.10052847862243652s
+ Thu, 05 Mar 2020 11:57:36  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 11:57:37  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 11:57:37  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.49639463424682617s
+ Thu, 05 Mar 2020 11:57:38  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.07808041572570801s
+ Thu, 05 Mar 2020 11:57:38  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 11:57:38  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入15264
+ Thu, 05 Mar 2020 11:57:39  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8564620018005371s
+ Thu, 05 Mar 2020 11:57:39  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 11:57:39  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 11:57:41  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.04587388038635254s
+ Thu, 05 Mar 2020 11:57:41  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 11:57:41  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 11:57:41  INFO test_0_login.py test_login_tele_wrong [ line:37 ] Test Pass!
+ Thu, 05 Mar 2020 11:57:41  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.050752878189086914s
+ Thu, 05 Mar 2020 11:57:41  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 11:57:41  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 11:57:58  INFO test_0_login.py test_login_tele_wrong [ line:30 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 11:57:58  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 11:58:00  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时2.2153313159942627s
+ Thu, 05 Mar 2020 11:58:00  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.09369468688964844s
+ Thu, 05 Mar 2020 11:58:00  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 11:58:01  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 11:58:03  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.4992122650146484s
+ Thu, 05 Mar 2020 11:58:04  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.9155681133270264s
+ Thu, 05 Mar 2020 11:58:04  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 11:58:05  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入99999999999
+ Thu, 05 Mar 2020 11:58:06  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8379170894622803s
+ Thu, 05 Mar 2020 11:58:06  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 11:58:06  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 11:58:08  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.038065433502197266s
+ Thu, 05 Mar 2020 11:58:08  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 11:58:08  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 11:58:08  INFO test_0_login.py test_login_tele_wrong [ line:37 ] Test Pass!
+ Thu, 05 Mar 2020 11:58:08  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.07027173042297363s
+ Thu, 05 Mar 2020 11:58:08  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 11:58:08  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 11:58:23  INFO test_0_login.py test_login_success [ line:48 ] 成功登录用例
+ Thu, 05 Mar 2020 11:58:23  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 11:58:26  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时3.1151485443115234s
+ Thu, 05 Mar 2020 11:58:26  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.09662437438964844s
+ Thu, 05 Mar 2020 11:58:26  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 11:58:27  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 11:58:28  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.0908739566802979s
+ Thu, 05 Mar 2020 11:58:28  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.0819845199584961s
+ Thu, 05 Mar 2020 11:58:28  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 11:58:30  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入18684720553
+ Thu, 05 Mar 2020 11:58:30  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8008589744567871s
+ Thu, 05 Mar 2020 11:58:30  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 11:58:31  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 11:58:32  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时1.852513074874878s
+ Thu, 05 Mar 2020 11:58:32  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时0.0893256664276123s
+ Thu, 05 Mar 2020 11:58:33  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功！
+ Thu, 05 Mar 2020 11:58:34  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')成功输入python
+ Thu, 05 Mar 2020 11:58:35  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8520445823669434s
+ Thu, 05 Mar 2020 11:58:35  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 11:58:35  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 11:58:44  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 11:58:44  ERROR basepage.py imgs_screenshot [ line:129 ] 截图失败!
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.01).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 71, in until
+    value = method(self._driver)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 128, in __call__
+    return _element_if_visible(_find_element(driver, self.locator))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 415, in _find_element
+    raise e
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 411, in _find_element
+    return driver.find_element(*by)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py", line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 126, in imgs_screenshot
+    self.driver.save_screenshot(pic_path)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1055, in save_screenshot
+    return self.get_screenshot_as_file(filename)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1032, in get_screenshot_as_file
+    png = self.get_screenshot_as_png()
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1064, in get_screenshot_as_png
+    return base64.b64decode(self.get_screenshot_as_base64().encode('ascii'))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1074, in get_screenshot_as_base64
+    return self.execute(Command.SCREENSHOT)['value']
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+ Thu, 05 Mar 2020 11:58:44  ERROR test_0_login.py test_login_success [ line:62 ] 登录失败!
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.01).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 71, in until
+    value = method(self._driver)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 128, in __call__
+    return _element_if_visible(_find_element(driver, self.locator))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 415, in _find_element
+    raise e
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 411, in _find_element
+    return driver.find_element(*by)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py", line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\python\mystudy\AppFramework\TestCases\test_0_login.py", line 59, in test_login_success
+    assert not IndexPage(init_keep,init_session,name).visiable_login_btn()
+  File "d:\python\mystudy\AppFramework\PageObjects\indexpage.py", line 21, in visiable_login_btn
+    BottomWidget(self.driver,self.logging,self.model).switch_bottom_widget('首页')
+  File "d:\python\mystudy\AppFramework\PageObjects\bottom_widget.py", line 17, in switch_bottom_widget
+    self.visiable_ele(loc)
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 40, in visiable_ele
+    self.imgs_screenshot()
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 130, in imgs_screenshot
+    raise e
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 126, in imgs_screenshot
+    self.driver.save_screenshot(pic_path)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1055, in save_screenshot
+    return self.get_screenshot_as_file(filename)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1032, in get_screenshot_as_file
+    png = self.get_screenshot_as_png()
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1064, in get_screenshot_as_png
+    return base64.b64decode(self.get_screenshot_as_base64().encode('ascii'))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1074, in get_screenshot_as_base64
+    return self.execute(Command.SCREENSHOT)['value']
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+ Thu, 05 Mar 2020 11:59:13  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 11:59:13  ERROR basepage.py imgs_screenshot [ line:129 ] 截图失败!
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.01).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 71, in until
+    value = method(self._driver)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 128, in __call__
+    return _element_if_visible(_find_element(driver, self.locator))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 415, in _find_element
+    raise e
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 411, in _find_element
+    return driver.find_element(*by)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py", line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 126, in imgs_screenshot
+    self.driver.save_screenshot(pic_path)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1055, in save_screenshot
+    return self.get_screenshot_as_file(filename)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1032, in get_screenshot_as_file
+    png = self.get_screenshot_as_png()
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1064, in get_screenshot_as_png
+    return base64.b64decode(self.get_screenshot_as_base64().encode('ascii'))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 1074, in get_screenshot_as_base64
+    return self.execute(Command.SCREENSHOT)['value']
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+ Thu, 05 Mar 2020 11:59:13  INFO test_0_login.py test_prepare [ line:24 ] app已登录,执行数据清空操作!
+ Thu, 05 Mar 2020 11:59:37  INFO test_0_login.py test_login_tele_wrong [ line:30 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 11:59:37  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 11:59:39  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时1.7109239101409912s
+ Thu, 05 Mar 2020 11:59:39  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.08491206169128418s
+ Thu, 05 Mar 2020 11:59:39  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 11:59:40  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 11:59:42  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.2855722904205322s
+ Thu, 05 Mar 2020 11:59:42  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.40796804428100586s
+ Thu, 05 Mar 2020 11:59:42  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 11:59:43  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入 
+ Thu, 05 Mar 2020 11:59:43  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8520469665527344s
+ Thu, 05 Mar 2020 11:59:43  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 11:59:43  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 11:59:45  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.04099297523498535s
+ Thu, 05 Mar 2020 11:59:45  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 11:59:46  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 11:59:46  INFO test_0_login.py test_login_tele_wrong [ line:37 ] Test Pass!
+ Thu, 05 Mar 2020 11:59:46  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.047826290130615234s
+ Thu, 05 Mar 2020 11:59:46  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 11:59:46  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 12:00:05  INFO test_0_login.py test_login_tele_wrong [ line:30 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 12:00:05  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 12:00:08  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时2.8902595043182373s
+ Thu, 05 Mar 2020 12:00:08  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.09322977066040039s
+ Thu, 05 Mar 2020 12:00:08  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 12:00:09  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 12:00:10  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.7164437770843506s
+ Thu, 05 Mar 2020 12:00:11  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.41675281524658203s
+ Thu, 05 Mar 2020 12:00:11  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 12:00:12  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入15264
+ Thu, 05 Mar 2020 12:00:13  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8686816692352295s
+ Thu, 05 Mar 2020 12:00:13  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 12:00:13  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 12:00:15  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.04684901237487793s
+ Thu, 05 Mar 2020 12:00:15  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 12:00:15  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 12:00:15  INFO test_0_login.py test_login_tele_wrong [ line:37 ] Test Pass!
+ Thu, 05 Mar 2020 12:00:15  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.04392218589782715s
+ Thu, 05 Mar 2020 12:00:15  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 12:00:15  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 12:00:30  INFO test_0_login.py test_login_tele_wrong [ line:30 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 12:00:30  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 12:00:34  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时3.9626083374023438s
+ Thu, 05 Mar 2020 12:00:34  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.1771700382232666s
+ Thu, 05 Mar 2020 12:00:34  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 12:00:35  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 12:00:36  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.1697471141815186s
+ Thu, 05 Mar 2020 12:00:36  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.42093825340270996s
+ Thu, 05 Mar 2020 12:00:36  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！

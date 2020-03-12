@@ -1,0 +1,14 @@
+ Tue, 03 Mar 2020 23:10:50  INFO logger.py <module> [ line:20 ] hehehehe
+ Tue, 03 Mar 2020 23:10:50  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Tue, 03 Mar 2020 23:10:50  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Tue, 03 Mar 2020 23:11:05  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_login')查找成功，耗时0.5525436401367188s
+ Tue, 03 Mar 2020 23:11:05  INFO test_0_login.py test_prepare [ line:17 ] app已登录,执行数据清空操作!
+ Tue, 03 Mar 2020 23:11:50  INFO test_0_login.py test_login_success [ line:25 ] 成功登录
+ Tue, 03 Mar 2020 23:11:50  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Tue, 03 Mar 2020 23:11:51  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.5961220264434814s
+ Tue, 03 Mar 2020 23:11:51  INFO basepage.py get_ele [ line:47 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Tue, 03 Mar 2020 23:11:52  INFO basepage.py click_ele [ line:80 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!

@@ -1,0 +1,40 @@
+login_tele_wrong:
+ -
+  tele: ' '
+  msg: '无效的手机号'
+ -
+  tele: 15264
+  msg: '无效的手机号'
+ - 
+  tele: 99999999999
+  msg: '无效的手机号'
+login_pwd_wrong:
+ -
+  tele: 18684720553
+  pwd: hehe
+  msg: '手机号或密码错误'
+ -
+  tele: 18888888888
+  pwd: python
+  msg: '手机号或密码错误'
+login_success:
+ - 
+  tele: 18684720553
+  pwd: python
+invest_wrong:
+  -
+    ammount: 0
+    msg: '最小投资金额为:100.0'
+  -
+    ammount: 15
+    msg: '投资金额必须为100的整数倍'
+  -
+    ammount: 88000000
+    msg: '最大投资金额为'
+  -
+    ammount: 99999999900
+    msg: '最大投资金额为'
+invest_success:
+  -
+    ammount: 100
+    msg: '投资成功'

@@ -1,0 +1,10 @@
+ Tue, 03 Mar 2020 19:49:56  INFO logger.py <module> [ line:20 ] hehehehe
+ Tue, 03 Mar 2020 19:49:56  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "d:\program files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Tue, 03 Mar 2020 19:49:56  INFO conftest.py init_session [ line:41 ] Project:xxxxx
+AppName:xxx
+
+ Tue, 03 Mar 2020 19:49:56  INFO testlogin.py test_login_success [ line:8 ] 正常登录成功

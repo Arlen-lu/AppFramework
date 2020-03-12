@@ -1,0 +1,14 @@
+{"pytest_version": "5.2.0", "$report_type": "SessionStart"}
+{"nodeid": "", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Caps/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Common/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PageLocators/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PageObjects/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py::TestLogin", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py::TestLogin", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_1_invest.py", "outcome": "failed", "longrepr": "D:\\Program Files (x86)\\python\\lib\\site-packages\\_pytest\\python.py:501: in _importtestmodule\n    mod = self.fspath.pyimport(ensuresyspath=importmode)\nD:\\Program Files (x86)\\python\\lib\\site-packages\\py\\_path\\local.py:701: in pyimport\n    __import__(modname)\n<frozen importlib._bootstrap>:998: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:977: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:671: in _load_unlocked\n    ???\nD:\\Program Files (x86)\\python\\lib\\site-packages\\_pytest\\assertion\\rewrite.py:142: in exec_module\n    exec(co, module.__dict__)\nTestCases\\test_1_invest.py:4: in <module>\n    from PageObjects.projectspage import ProjectsPage\nE     File \"d:\\python\\mystudy\\AppFramework\\PageObjects\\projectspage.py\", line 57\nE       break\nE       ^\nE   SyntaxError: 'break' outside loop", "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestDatas/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"exitstatus": 2, "$report_type": "SessionFinish"}

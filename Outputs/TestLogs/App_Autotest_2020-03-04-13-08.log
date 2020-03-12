@@ -1,0 +1,94 @@
+ Wed, 04 Mar 2020 13:08:10  INFO logger.py <module> [ line:20 ] hehehehe
+ Wed, 04 Mar 2020 13:08:10  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Wed, 04 Mar 2020 13:08:10  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Wed, 04 Mar 2020 13:08:25  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_login')查找成功，耗时0.5339815616607666s
+ Wed, 04 Mar 2020 13:08:25  INFO test_0_login.py test_prepare [ line:19 ] app已登录,执行数据清空操作!
+ Wed, 04 Mar 2020 13:09:13  INFO test_0_login.py test_login_tele_wrong [ line:27 ] 手机号输入错误用例
+ Wed, 04 Mar 2020 13:09:13  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Wed, 04 Mar 2020 13:09:13  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.5417060852050781s
+ Wed, 04 Mar 2020 13:09:13  INFO basepage.py get_ele [ line:47 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Wed, 04 Mar 2020 13:09:14  INFO basepage.py click_ele [ line:80 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Wed, 04 Mar 2020 13:09:15  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.5568954944610596s
+ Wed, 04 Mar 2020 13:09:15  INFO basepage.py get_ele [ line:47 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Wed, 04 Mar 2020 13:09:16  INFO basepage.py input_ele_text [ line:59 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入 
+ Wed, 04 Mar 2020 13:09:17  INFO basepage.py get_ele [ line:47 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Wed, 04 Mar 2020 13:09:17  INFO basepage.py click_ele [ line:80 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Wed, 04 Mar 2020 13:09:18  INFO basepage.py imgs_screenshot [ line:105 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\手机号输入错误-2020-03-04-13-09-17.png
+ Wed, 04 Mar 2020 13:09:18  ERROR basepage.py get_ele [ line:51 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找失败！
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 46, in get_ele
+    ele = self.driver.find_element(*loc)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py", line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: An element could not be located on the page using the given search parameters.
+
+ Wed, 04 Mar 2020 13:09:18  INFO test_0_login.py test_login_tele_wrong [ line:35 ] Test Fail
+ Wed, 04 Mar 2020 13:10:06  INFO test_0_login.py test_login_tele_wrong [ line:27 ] 手机号输入错误用例
+ Wed, 04 Mar 2020 13:10:06  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Wed, 04 Mar 2020 13:10:07  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.5719337463378906s
+ Wed, 04 Mar 2020 13:10:07  INFO basepage.py get_ele [ line:47 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Wed, 04 Mar 2020 13:10:08  INFO basepage.py click_ele [ line:80 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Wed, 04 Mar 2020 13:10:09  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.5677657127380371s
+ Wed, 04 Mar 2020 13:10:09  INFO basepage.py get_ele [ line:47 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Wed, 04 Mar 2020 13:10:10  INFO basepage.py input_ele_text [ line:59 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入15264
+ Wed, 04 Mar 2020 13:10:10  INFO basepage.py get_ele [ line:47 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Wed, 04 Mar 2020 13:10:11  INFO basepage.py click_ele [ line:80 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Wed, 04 Mar 2020 13:10:12  INFO basepage.py imgs_screenshot [ line:105 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\手机号输入错误-2020-03-04-13-10-11.png
+ Wed, 04 Mar 2020 13:10:12  ERROR basepage.py get_ele [ line:51 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找失败！
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 46, in get_ele
+    ele = self.driver.find_element(*loc)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py", line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: An element could not be located on the page using the given search parameters.
+
+ Wed, 04 Mar 2020 13:10:12  INFO test_0_login.py test_login_tele_wrong [ line:35 ] Test Fail
+ Wed, 04 Mar 2020 13:10:26  WARNING connectionpool.py urlopen [ line:744 ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /wd/hub/session/720b71cd-cd26-45c4-a42e-44347b5cf9c8/appium/device/current_activity
+ Wed, 04 Mar 2020 13:11:01  INFO test_0_login.py test_login_tele_wrong [ line:27 ] 手机号输入错误用例
+ Wed, 04 Mar 2020 13:11:01  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Wed, 04 Mar 2020 13:11:02  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时1.1304004192352295s
+ Wed, 04 Mar 2020 13:11:02  INFO basepage.py get_ele [ line:47 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Wed, 04 Mar 2020 13:11:03  INFO basepage.py click_ele [ line:80 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Wed, 04 Mar 2020 13:11:04  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.806025505065918s
+ Wed, 04 Mar 2020 13:11:04  INFO basepage.py get_ele [ line:47 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Wed, 04 Mar 2020 13:11:05  INFO basepage.py input_ele_text [ line:59 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入99999999999
+ Wed, 04 Mar 2020 13:11:05  INFO basepage.py get_ele [ line:47 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Wed, 04 Mar 2020 13:11:06  INFO basepage.py click_ele [ line:80 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Wed, 04 Mar 2020 13:11:07  INFO basepage.py imgs_screenshot [ line:105 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\手机号输入错误-2020-03-04-13-11-06.png
+ Wed, 04 Mar 2020 13:11:07  ERROR basepage.py get_ele [ line:51 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找失败！
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 46, in get_ele
+    ele = self.driver.find_element(*loc)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py", line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 29, in check_response
+    raise wde
+  File "D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py", line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: An element could not be located on the page using the given search parameters.
+
+ Wed, 04 Mar 2020 13:11:07  INFO test_0_login.py test_login_tele_wrong [ line:35 ] Test Fail

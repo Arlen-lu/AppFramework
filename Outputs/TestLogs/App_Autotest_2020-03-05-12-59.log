@@ -1,0 +1,92 @@
+ Thu, 05 Mar 2020 12:59:29  INFO logger.py <module> [ line:20 ] hehehehe
+ Thu, 05 Mar 2020 12:59:29  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Thu, 05 Mar 2020 12:59:29  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Thu, 05 Mar 2020 12:59:55  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 12:59:56  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.5692567825317383s
+ Thu, 05 Mar 2020 12:59:56  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.06734490394592285s
+ Thu, 05 Mar 2020 12:59:56  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 12:59:57  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 12:59:57  INFO test_0_prepare.py test_prepare [ line:17 ] app未登录,开始执行用例!
+ Thu, 05 Mar 2020 13:00:08  INFO test_1_login.py test_login_tele_wrong [ line:19 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 13:00:11  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 13:00:11  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.07905697822570801s
+ Thu, 05 Mar 2020 13:00:11  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.06636786460876465s
+ Thu, 05 Mar 2020 13:00:11  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 13:00:12  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 13:00:13  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.5054349899291992s
+ Thu, 05 Mar 2020 13:00:13  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.06929707527160645s
+ Thu, 05 Mar 2020 13:00:13  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 13:00:13  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入 
+ Thu, 05 Mar 2020 13:00:14  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8232738971710205s
+ Thu, 05 Mar 2020 13:00:14  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 13:00:14  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 13:00:16  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.032210588455200195s
+ Thu, 05 Mar 2020 13:00:16  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 13:00:16  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 13:00:16  INFO test_1_login.py test_login_tele_wrong [ line:27 ] Test Pass!
+ Thu, 05 Mar 2020 13:00:16  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.0536808967590332s
+ Thu, 05 Mar 2020 13:00:16  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 13:00:16  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 13:00:16  INFO test_1_login.py test_login_tele_wrong [ line:19 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 13:00:37  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.033179521560668945s
+ Thu, 05 Mar 2020 13:00:37  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.034160614013671875s
+ Thu, 05 Mar 2020 13:00:37  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 13:00:38  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入15264
+ Thu, 05 Mar 2020 13:00:38  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8384969234466553s
+ Thu, 05 Mar 2020 13:00:38  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 13:00:38  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 13:00:40  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.032209157943725586s
+ Thu, 05 Mar 2020 13:00:40  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 13:00:41  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 13:00:41  INFO test_1_login.py test_login_tele_wrong [ line:27 ] Test Pass!
+ Thu, 05 Mar 2020 13:00:41  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.034149885177612305s
+ Thu, 05 Mar 2020 13:00:41  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 13:00:41  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 13:00:41  INFO test_1_login.py test_login_tele_wrong [ line:19 ] 手机号输入错误用例
+ Thu, 05 Mar 2020 13:01:01  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.027330398559570312s
+ Thu, 05 Mar 2020 13:01:01  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.03123307228088379s
+ Thu, 05 Mar 2020 13:01:01  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 13:01:01  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入99999999999
+ Thu, 05 Mar 2020 13:01:02  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.9685711860656738s
+ Thu, 05 Mar 2020 13:01:02  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 13:01:03  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 13:01:05  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功，耗时0.025377988815307617s
+ Thu, 05 Mar 2020 13:01:05  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/tv_message')查找成功！
+ Thu, 05 Mar 2020 13:01:05  INFO basepage.py get_ele_attr [ line:113 ] 获取元素('id', 'com.xxzb.fenwoo:id/tv_message')得text属性为无效的手机号
+ Thu, 05 Mar 2020 13:01:05  INFO test_1_login.py test_login_tele_wrong [ line:27 ] Test Pass!
+ Thu, 05 Mar 2020 13:01:05  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功，耗时0.03253936767578125s
+ Thu, 05 Mar 2020 13:01:05  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')查找成功！
+ Thu, 05 Mar 2020 13:01:05  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_confirm')成功点击!
+ Thu, 05 Mar 2020 13:01:24  INFO test_1_login.py test_login_success [ line:38 ] 成功登录用例
+ Thu, 05 Mar 2020 13:01:24  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 13:01:26  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时1.8158438205718994s
+ Thu, 05 Mar 2020 13:01:26  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.07222509384155273s
+ Thu, 05 Mar 2020 13:01:26  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 13:01:26  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 13:01:28  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时1.0401582717895508s
+ Thu, 05 Mar 2020 13:01:28  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.47636890411376953s
+ Thu, 05 Mar 2020 13:01:28  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Thu, 05 Mar 2020 13:01:29  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')成功输入18684720553
+ Thu, 05 Mar 2020 13:01:30  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8106770515441895s
+ Thu, 05 Mar 2020 13:01:30  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 13:01:30  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 13:01:32  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时2.611172676086426s
+ Thu, 05 Mar 2020 13:01:33  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功，耗时0.4560658931732178s
+ Thu, 05 Mar 2020 13:01:33  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')查找成功！
+ Thu, 05 Mar 2020 13:01:34  INFO basepage.py input_ele_text [ line:81 ] 元素('id', 'com.xxzb.fenwoo:id/et_pwd')成功输入python
+ Thu, 05 Mar 2020 13:01:34  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功，耗时0.8229727745056152s
+ Thu, 05 Mar 2020 13:01:34  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')查找成功！
+ Thu, 05 Mar 2020 13:01:34  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_next_step')成功点击!
+ Thu, 05 Mar 2020 13:01:39  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')查找成功，耗时0.3699789047241211s
+ Thu, 05 Mar 2020 13:01:39  INFO basepage.py get_ele [ line:56 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')查找成功！
+ Thu, 05 Mar 2020 13:01:39  INFO basepage.py click_ele [ line:102 ] 元素('id', 'com.xxzb.fenwoo:id/btn_cancel')成功点击!
+ Thu, 05 Mar 2020 13:01:43  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面首页
+ Thu, 05 Mar 2020 13:01:44  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.530480146408081s
+ Thu, 05 Mar 2020 13:01:44  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功，耗时0.08685493469238281s
+ Thu, 05 Mar 2020 13:01:44  INFO basepage.py get_ele [ line:56 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')查找成功！
+ Thu, 05 Mar 2020 13:01:45  INFO basepage.py click_ele [ line:102 ] 元素('-android uiautomator', 'new UiSelector().text("首页")')成功点击!
+ Thu, 05 Mar 2020 13:02:05  INFO test_1_login.py test_login_success [ line:50 ] 确认登录成功!

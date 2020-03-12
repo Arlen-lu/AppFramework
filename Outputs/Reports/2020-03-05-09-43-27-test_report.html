@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function find_all(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sort_column(elem) {
+    toggle_sort_states(elem);
+    var colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    var key;
+    if (elem.classList.contains('numeric')) {
+        key = key_num;
+    } else if (elem.classList.contains('result')) {
+        key = key_result;
+    } else {
+        key = key_alpha;
+    }
+    sort_table(elem, key(colIndex));
+}
+
+function show_all_extras() {
+    find_all('.col-result').forEach(show_extras);
+}
+
+function hide_all_extras() {
+    find_all('.col-result').forEach(hide_extras);
+}
+
+function show_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.remove("collapsed");
+    expandcollapse.classList.remove("expander");
+    expandcollapse.classList.add("collapser");
+}
+
+function hide_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.add("collapsed");
+    expandcollapse.classList.remove("collapser");
+    expandcollapse.classList.add("expander");
+}
+
+function show_filters() {
+    var filter_items = document.getElementsByClassName('filter');
+    for (var i = 0; i < filter_items.length; i++)
+        filter_items[i].hidden = false;
+}
+
+function add_collapse() {
+    // Add links for show/hide all
+    var resulttable = find('table#results-table');
+    var showhideall = document.createElement("p");
+    showhideall.innerHTML = '<a href="javascript:show_all_extras()">Show all details</a> / ' +
+                            '<a href="javascript:hide_all_extras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    find_all('.col-result').forEach(function(elem) {
+        var collapsed = get_query_parameter('collapsed') || 'Passed';
+        var extras = elem.parentNode.nextElementSibling;
+        var expandcollapse = document.createElement("span");
+        if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add("collapsed");
+            expandcollapse.classList.add("expander");
+        } else {
+            expandcollapse.classList.add("collapser");
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener("click", function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains("collapsed")) {
+                show_extras(event.currentTarget);
+            } else {
+                hide_extras(event.currentTarget);
+            }
+        });
+    })
+}
+
+function get_query_parameter(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () {
+    reset_sort_headers();
+
+    add_collapse();
+
+    show_filters();
+
+    sort_column(find('.initial-sort'));
+
+    find_all('.sortable').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  sort_column(elem);
+                              }, false)
+    });
+
+};
+
+function sort_table(clicked, key_func) {
+    var rows = find_all('.results-table-row');
+    var reversed = !clicked.classList.contains('asc');
+    var sorted_rows = sort(rows, key_func, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    var thead = document.getElementById("results-table-head");
+    document.getElementById('results-table').remove();
+    var parent = document.createElement("table");
+    parent.id = "results-table";
+    parent.appendChild(thead);
+    sorted_rows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName("BODY")[0].appendChild(parent);
+}
+
+function sort(items, key_func, reversed) {
+    var sort_array = items.map(function(item, i) {
+        return [key_func(item), i];
+    });
+
+    sort_array.sort(function(a, b) {
+        var key_a = a[0];
+        var key_b = b[0];
+
+        if (key_a == key_b) return 0;
+
+        if (reversed) {
+            return (key_a < key_b ? 1 : -1);
+        } else {
+            return (key_a > key_b ? 1 : -1);
+        }
+    });
+
+    return sort_array.map(function(item) {
+        var index = item[1];
+        return items[index];
+    });
+}
+
+function key_alpha(col_index) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[col_index].firstChild.data.toLowerCase();
+    };
+}
+
+function key_num(col_index) {
+    return function(elem) {
+        return parseFloat(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function key_result(col_index) {
+    return function(elem) {
+        var strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+                       'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function reset_sort_headers() {
+    find_all('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    find_all('.sortable').forEach(function(elem) {
+        var icon = document.createElement("div");
+        icon.className = "sort-icon";
+        icon.textContent = "vvv";
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove("desc", "active");
+        elem.classList.add("asc", "inactive");
+    });
+}
+
+function toggle_sort_states(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        reset_sort_headers();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function is_all_rows_hidden(value) {
+  return value.hidden == false;
+}
+
+function filter_table(elem) {
+    var outcome_att = "data-test-result";
+    var outcome = elem.getAttribute(outcome_att);
+    class_outcome = outcome + " results-table-row";
+    var outcome_rows = document.getElementsByClassName(class_outcome);
+
+    for(var i = 0; i < outcome_rows.length; i++){
+        outcome_rows[i].hidden = !elem.checked;
+    }
+
+    var rows = find_all('.results-table-row').filter(is_all_rows_hidden);
+    var all_rows_hidden = rows.length == 0 ? true : false;
+    var not_found_message = document.getElementById("not-found-message");
+    not_found_message.hidden = !all_rows_hidden;
+}
+</script>
+    <h1>2020-03-05-09-43-27-test_report.html</h1>
+    <p>Report generated on 05-Mar-2020 at 09:48:54 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v2.0.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>JAVA_HOME</td>
+        <td>D:\Program Files (x86)\Java\jdk1.8.0_161</td></tr>
+      <tr>
+        <td>Packages</td>
+        <td>{&apos;pytest&apos;: &apos;5.2.0&apos;, &apos;py&apos;: &apos;1.8.1&apos;, &apos;pluggy&apos;: &apos;0.13.1&apos;}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.17763-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{&apos;allure-pytest&apos;: &apos;2.8.10&apos;, &apos;html&apos;: &apos;2.0.1&apos;, &apos;metadata&apos;: &apos;1.8.0&apos;, &apos;ordering&apos;: &apos;0.6&apos;, &apos;reportlog&apos;: &apos;0.1.0&apos;, &apos;rerunfailures&apos;: &apos;8.0&apos;}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.9.0a3</td></tr></table>
+    <h2>Summary</h2>
+    <p>9 tests ran in 326.57 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">3 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">6 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>, <input checked="true" class="filter" data-test-result="rerun" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="rerun">0 rerun</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable numeric" col="duration">Duration</th>
+          <th>Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestInvest::test_invest_worng[logindata0-testdatas0]</td>
+          <td class="col-duration">33.94</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCEA036910&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;38d901f9-25d2-48bb-a0c0-7bfd97d828ad&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 0, &#x27;msg&#x27;: &#x27;最小投资金额为:100.0&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>&gt;               assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/><br/>TestCases\test_1_invest.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA042730&gt;<br/><br/>    def get_details_toast_0(self):<br/>&gt;       return self.get_ele_attr(loc.details_toast_0_loc,&#x27;text&#x27;)<br/><br/>PageObjects\projectspage.py:59: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA042730&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;最小投资金额为:100.0&#x27;]&quot;), name = &#x27;text&#x27;<br/><br/>    def get_ele_attr(self,loc,name):<br/>&gt;       ele = self.get_ele(loc)<br/><br/>Common\basepage.py:102: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA042730&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;最小投资金额为:100.0&#x27;]&quot;)<br/><br/>    def get_ele(self,loc):<br/>&gt;       self.visiable_ele(loc)<br/><br/>Common\basepage.py:45: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA042730&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;最小投资金额为:100.0&#x27;]&quot;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>            WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/>            end_t = time.time()<br/>            logging.info(&#x27;元素{0}查找成功，耗时{1}s&#x27;.format(loc,(end_t-start_t)))<br/>        except Exception as e:<br/>            self.imgs_screenshot()<br/>            logging.exception(&quot;元素{0}未找到&quot;.format(loc))<br/>&gt;           raise e<br/><br/>Common\basepage.py:42: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA042730&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;最小投资金额为:100.0&#x27;]&quot;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>&gt;           WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/><br/>Common\basepage.py:36: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.wait.WebDriverWait (session=&quot;38d901f9-25d2-48bb-a0c0-7bfd97d828ad&quot;)&gt;<br/>method = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000002BCEA0428B0&gt;, message = &#x27;&#x27;<br/><br/>    def until(self, method, message=&#x27;&#x27;):<br/>        &quot;&quot;&quot;Calls the method provided with the driver as an argument until the \<br/>        return value is not False.&quot;&quot;&quot;<br/>        screen = None<br/>        stacktrace = None<br/>    <br/>        end_time = time.time() + self._timeout<br/>        while True:<br/>            try:<br/>                value = method(self._driver)<br/>                if value:<br/>                    return value<br/>            except self._ignored_exceptions as exc:<br/>                screen = getattr(exc, &#x27;screen&#x27;, None)<br/>                stacktrace = getattr(exc, &#x27;stacktrace&#x27;, None)<br/>            time.sleep(self._poll)<br/>            if time.time() &gt; end_time:<br/>                break<br/>&gt;       raise TimeoutException(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.TimeoutException: Message:</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py:80: TimeoutException<br/><br/>During handling of the above exception, another exception occurred:<br/><br/>self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCEA036910&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;38d901f9-25d2-48bb-a0c0-7bfd97d828ad&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 0, &#x27;msg&#x27;: &#x27;最小投资金额为:100.0&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;]%100 !=0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;] &gt;ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas[&#x27;ammount&#x27;]&gt;ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():<br/>                assert testdatas[&#x27;msg&#x27;] in ProjectsPage(init_toast_keep,init_session,name).get_details_toast_2()<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>        except Exception as e:<br/>&gt;           init_session.logging(&#x27;Test Fail!&#x27;)<br/><span class="error">E           AttributeError: module &#x27;logging&#x27; has no attribute &#x27;logging&#x27;</span><br/><br/>TestCases\test_1_invest.py:47: AttributeError<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.585791826248169s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.0780794620513916s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面项目
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时0.08003020286560059s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时0.05465579032897949s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:59 元素集合(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/pbar_process&#x27;)查找成功!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功，耗时2.1853127479553223s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)得text属性为剩余 7天9时34分
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功，耗时0.08393669128417969s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)得text属性为8%
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功，耗时0.25473451614379883s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)成功输入0
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功，耗时0.9851386547088623s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:119 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-09-45-22.png
+[31m[1mERROR   [0m root:basepage.py:41 元素(&#x27;xpath&#x27;, &quot;//*[@text=&#x27;最小投资金额为:100.0&#x27;]&quot;)未找到
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py&quot;, line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message:<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestInvest::test_invest_worng[logindata0-testdatas1]</td>
+          <td class="col-duration">32.96</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCEA042DC0&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;6313b4bf-7c6b-455b-8875-66f6a12dcde8&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 15, &#x27;msg&#x27;: &#x27;投资金额必须为100的整数倍&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;]%100 !=0:<br/>&gt;               assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas[&#x27;msg&#x27;]<br/><br/>TestCases\test_1_invest.py:41: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA066AC0&gt;<br/><br/>    def get_details_toast_1(self):<br/>&gt;       return self.get_ele_attr(loc.details_toast_1_loc,&#x27;text&#x27;)<br/><br/>PageObjects\projectspage.py:62: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA066AC0&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;投资金额必须为100的整数倍&#x27;]&quot;), name = &#x27;text&#x27;<br/><br/>    def get_ele_attr(self,loc,name):<br/>&gt;       ele = self.get_ele(loc)<br/><br/>Common\basepage.py:102: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA066AC0&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;投资金额必须为100的整数倍&#x27;]&quot;)<br/><br/>    def get_ele(self,loc):<br/>&gt;       self.visiable_ele(loc)<br/><br/>Common\basepage.py:45: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA066AC0&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;投资金额必须为100的整数倍&#x27;]&quot;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>            WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/>            end_t = time.time()<br/>            logging.info(&#x27;元素{0}查找成功，耗时{1}s&#x27;.format(loc,(end_t-start_t)))<br/>        except Exception as e:<br/>            self.imgs_screenshot()<br/>            logging.exception(&quot;元素{0}未找到&quot;.format(loc))<br/>&gt;           raise e<br/><br/>Common\basepage.py:42: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA066AC0&gt;, loc = (&#x27;xpath&#x27;, &quot;//*[@text=&#x27;投资金额必须为100的整数倍&#x27;]&quot;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>&gt;           WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/><br/>Common\basepage.py:36: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.wait.WebDriverWait (session=&quot;6313b4bf-7c6b-455b-8875-66f6a12dcde8&quot;)&gt;<br/>method = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000002BCEA92D790&gt;, message = &#x27;&#x27;<br/><br/>    def until(self, method, message=&#x27;&#x27;):<br/>        &quot;&quot;&quot;Calls the method provided with the driver as an argument until the \<br/>        return value is not False.&quot;&quot;&quot;<br/>        screen = None<br/>        stacktrace = None<br/>    <br/>        end_time = time.time() + self._timeout<br/>        while True:<br/>            try:<br/>                value = method(self._driver)<br/>                if value:<br/>                    return value<br/>            except self._ignored_exceptions as exc:<br/>                screen = getattr(exc, &#x27;screen&#x27;, None)<br/>                stacktrace = getattr(exc, &#x27;stacktrace&#x27;, None)<br/>            time.sleep(self._poll)<br/>            if time.time() &gt; end_time:<br/>                break<br/>&gt;       raise TimeoutException(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.TimeoutException: Message:</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py:80: TimeoutException<br/><br/>During handling of the above exception, another exception occurred:<br/><br/>self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCEA042DC0&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;6313b4bf-7c6b-455b-8875-66f6a12dcde8&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 15, &#x27;msg&#x27;: &#x27;投资金额必须为100的整数倍&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;]%100 !=0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;] &gt;ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas[&#x27;ammount&#x27;]&gt;ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():<br/>                assert testdatas[&#x27;msg&#x27;] in ProjectsPage(init_toast_keep,init_session,name).get_details_toast_2()<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>        except Exception as e:<br/>&gt;           init_session.logging(&#x27;Test Fail!&#x27;)<br/><span class="error">E           AttributeError: module &#x27;logging&#x27; has no attribute &#x27;logging&#x27;</span><br/><br/>TestCases\test_1_invest.py:47: AttributeError<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.9164609909057617s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.08881497383117676s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面项目
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时1.2824997901916504s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时0.06006026268005371s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:59 元素集合(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/pbar_process&#x27;)查找成功!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功，耗时0.10493922233581543s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)得text属性为剩余 7天9时33分
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功，耗时0.12004780769348145s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)得text属性为8%
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功，耗时0.2196028232574463s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)成功输入15
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功，耗时0.5328941345214844s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:119 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-09-46-08.png
+[31m[1mERROR   [0m root:basepage.py:41 元素(&#x27;xpath&#x27;, &quot;//*[@text=&#x27;投资金额必须为100的整数倍&#x27;]&quot;)未找到
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py&quot;, line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message:<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestInvest::test_invest_worng[logindata0-testdatas2]</td>
+          <td class="col-duration">32.78</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCEA92D700&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ccebf950-a9ab-43b1-858e-37ca3b1453c8&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 88000000, &#x27;msg&#x27;: &#x27;最大投资金额为&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;]%100 !=0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>&gt;           elif testdatas[&#x27;ammount&#x27;] &gt;ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas[&#x27;ammount&#x27;]&gt;ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():<br/><br/>TestCases\test_1_invest.py:43: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA9AFFA0&gt;<br/><br/>    def get_details_input_remain_money(self):<br/>&gt;       return self.get_ele_attr(loc.details_input_remain_money_loc,&#x27;text&#x27;)<br/><br/>PageObjects\projectspage.py:32: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA9AFFA0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;), name = &#x27;text&#x27;<br/><br/>    def get_ele_attr(self,loc,name):<br/>&gt;       ele = self.get_ele(loc)<br/><br/>Common\basepage.py:102: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA9AFFA0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)<br/><br/>    def get_ele(self,loc):<br/>&gt;       self.visiable_ele(loc)<br/><br/>Common\basepage.py:45: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA9AFFA0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>            WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/>            end_t = time.time()<br/>            logging.info(&#x27;元素{0}查找成功，耗时{1}s&#x27;.format(loc,(end_t-start_t)))<br/>        except Exception as e:<br/>            self.imgs_screenshot()<br/>            logging.exception(&quot;元素{0}未找到&quot;.format(loc))<br/>&gt;           raise e<br/><br/>Common\basepage.py:42: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA9AFFA0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>&gt;           WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/><br/>Common\basepage.py:36: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.wait.WebDriverWait (session=&quot;ccebf950-a9ab-43b1-858e-37ca3b1453c8&quot;)&gt;<br/>method = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000002BCE96D4880&gt;, message = &#x27;&#x27;<br/><br/>    def until(self, method, message=&#x27;&#x27;):<br/>        &quot;&quot;&quot;Calls the method provided with the driver as an argument until the \<br/>        return value is not False.&quot;&quot;&quot;<br/>        screen = None<br/>        stacktrace = None<br/>    <br/>        end_time = time.time() + self._timeout<br/>        while True:<br/>            try:<br/>                value = method(self._driver)<br/>                if value:<br/>                    return value<br/>            except self._ignored_exceptions as exc:<br/>                screen = getattr(exc, &#x27;screen&#x27;, None)<br/>                stacktrace = getattr(exc, &#x27;stacktrace&#x27;, None)<br/>            time.sleep(self._poll)<br/>            if time.time() &gt; end_time:<br/>                break<br/>&gt;       raise TimeoutException(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.TimeoutException: Message:</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py:80: TimeoutException<br/><br/>During handling of the above exception, another exception occurred:<br/><br/>self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCEA92D700&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ccebf950-a9ab-43b1-858e-37ca3b1453c8&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 88000000, &#x27;msg&#x27;: &#x27;最大投资金额为&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;]%100 !=0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;] &gt;ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas[&#x27;ammount&#x27;]&gt;ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():<br/>                assert testdatas[&#x27;msg&#x27;] in ProjectsPage(init_toast_keep,init_session,name).get_details_toast_2()<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>        except Exception as e:<br/>&gt;           init_session.logging(&#x27;Test Fail!&#x27;)<br/><span class="error">E           AttributeError: module &#x27;logging&#x27; has no attribute &#x27;logging&#x27;</span><br/><br/>TestCases\test_1_invest.py:47: AttributeError<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.9047501087188721s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.08491182327270508s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面项目
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时0.8291277885437012s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时0.0527040958404541s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:59 元素集合(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/pbar_process&#x27;)查找成功!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功，耗时0.48018956184387207s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)得text属性为剩余 7天9时32分
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功，耗时0.21764779090881348s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)得text属性为8%
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功，耗时0.2683990001678467s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)成功输入88000000
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功，耗时0.8270785808563232s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:119 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-09-46-53.png
+[31m[1mERROR   [0m root:basepage.py:41 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)未找到
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py&quot;, line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message:<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestInvest::test_invest_worng[logindata0-testdatas3]</td>
+          <td class="col-duration">33.66</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCE96D4220&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;9dc95615-063e-49d3-b049-a3a93fb217bc&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 99999999900, &#x27;msg&#x27;: &#x27;最大投资金额为&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;]%100 !=0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>&gt;           elif testdatas[&#x27;ammount&#x27;] &gt;ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas[&#x27;ammount&#x27;]&gt;ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():<br/><br/>TestCases\test_1_invest.py:43: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA996BE0&gt;<br/><br/>    def get_details_input_remain_money(self):<br/>&gt;       return self.get_ele_attr(loc.details_input_remain_money_loc,&#x27;text&#x27;)<br/><br/>PageObjects\projectspage.py:32: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA996BE0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;), name = &#x27;text&#x27;<br/><br/>    def get_ele_attr(self,loc,name):<br/>&gt;       ele = self.get_ele(loc)<br/><br/>Common\basepage.py:102: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA996BE0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)<br/><br/>    def get_ele(self,loc):<br/>&gt;       self.visiable_ele(loc)<br/><br/>Common\basepage.py:45: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA996BE0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>            WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/>            end_t = time.time()<br/>            logging.info(&#x27;元素{0}查找成功，耗时{1}s&#x27;.format(loc,(end_t-start_t)))<br/>        except Exception as e:<br/>            self.imgs_screenshot()<br/>            logging.exception(&quot;元素{0}未找到&quot;.format(loc))<br/>&gt;           raise e<br/><br/>Common\basepage.py:42: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;PageObjects.projectspage.ProjectsPage object at 0x000002BCEA996BE0&gt;, loc = (&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;), timeout = 20, poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>&gt;           WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/><br/>Common\basepage.py:36: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.wait.WebDriverWait (session=&quot;9dc95615-063e-49d3-b049-a3a93fb217bc&quot;)&gt;<br/>method = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000002BCEA98D700&gt;, message = &#x27;&#x27;<br/><br/>    def until(self, method, message=&#x27;&#x27;):<br/>        &quot;&quot;&quot;Calls the method provided with the driver as an argument until the \<br/>        return value is not False.&quot;&quot;&quot;<br/>        screen = None<br/>        stacktrace = None<br/>    <br/>        end_time = time.time() + self._timeout<br/>        while True:<br/>            try:<br/>                value = method(self._driver)<br/>                if value:<br/>                    return value<br/>            except self._ignored_exceptions as exc:<br/>                screen = getattr(exc, &#x27;screen&#x27;, None)<br/>                stacktrace = getattr(exc, &#x27;stacktrace&#x27;, None)<br/>            time.sleep(self._poll)<br/>            if time.time() &gt; end_time:<br/>                break<br/>&gt;       raise TimeoutException(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.TimeoutException: Message:</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py:80: TimeoutException<br/><br/>During handling of the above exception, another exception occurred:<br/><br/>self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCE96D4220&gt;<br/>init_toast_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;9dc95615-063e-49d3-b049-a3a93fb217bc&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 99999999900, &#x27;msg&#x27;: &#x27;最大投资金额为&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_wrong&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_toast_keep&#x27;)<br/>    def test_invest_worng(self,init_toast_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认toast错误提示<br/>        &#x27;&#x27;&#x27;<br/>        name = &#x27;投标操作&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/>            TestLogin().test_login_success(init_toast_keep,init_session,logindata)<br/>        BottomWidget(init_toast_keep,init_session,name).switch_bottom_widget(&#x27;项目&#x27;)<br/>        ProjectsPage(init_toast_keep,init_session,name).ensure_invest_is_visiable()<br/>        ProjectsPage(init_toast_keep,init_session,name).input_details_input_remain_money(testdatas[&#x27;ammount&#x27;])<br/>        ProjectsPage(init_toast_keep,init_session,name).click_btn_details_invest()<br/>        try:<br/>            if testdatas[&#x27;ammount&#x27;] ==0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_0() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;]%100 !=0:<br/>                assert ProjectsPage(init_toast_keep,init_session,name).get_details_toast_1() ==testdatas[&#x27;msg&#x27;]<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>            elif testdatas[&#x27;ammount&#x27;] &gt;ProjectsPage(init_toast_keep,init_session,name).get_details_input_remain_money() or testdatas[&#x27;ammount&#x27;]&gt;ProjectsPage(init_toast_keep,init_session,name).get_details_invest_balance():<br/>                assert testdatas[&#x27;msg&#x27;] in ProjectsPage(init_toast_keep,init_session,name).get_details_toast_2()<br/>                init_session.logging(&#x27;Test Pass!&#x27;)<br/>        except Exception as e:<br/>&gt;           init_session.logging(&#x27;Test Fail!&#x27;)<br/><span class="error">E           AttributeError: module &#x27;logging&#x27; has no attribute &#x27;logging&#x27;</span><br/><br/>TestCases\test_1_invest.py:47: AttributeError<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时1.0169918537139893s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.07515192031860352s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面项目
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时1.8965940475463867s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功，耗时0.057116031646728516s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;项目&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:59 元素集合(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/pbar_process&#x27;)查找成功!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功，耗时1.8511881828308105s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_bidremain&#x27;)得text属性为剩余 7天9时32分
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功，耗时0.11623835563659668s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:105 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_remaintime&#x27;)得text属性为8%
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功，耗时0.3577239513397217s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)成功输入99999999900
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功，耗时0.6300251483917236s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_investnow&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:119 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\投标操作-2020-03-05-09-47-39.png
+[31m[1mERROR   [0m root:basepage.py:41 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_investamount&#x27;)未找到
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py&quot;, line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message:<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestInvest::test_invest_success[logindata0-testdatas0]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;AppFramework.TestCases.test_1_invest.TestInvest object at 0x000002BCEA92DD60&gt;<br/>init_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;0875aaf8-64ea-4e56-bfb2-ef4bf6dbb47a&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;ammount&#x27;: 100, &#x27;msg&#x27;: &#x27;投资成功&#x27;}<br/>logindata = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;invest_success&#x27;])<br/>    @pytest.mark.parametrize(&#x27;logindata&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_keep&#x27;)<br/>    def test_invest_success(self,init_keep,init_session,testdatas,logindata):<br/>        &#x27;&#x27;&#x27;<br/>        前提:已登录状态<br/>        1.进入到&quot;项目&quot;页签<br/>        2.点击可投资的项目<br/>        3.输入投资金额<br/>        4.点击投标按钮<br/>        5.确认投资成功(投资成功+资金变化)<br/>        &#x27;&#x27;&#x27;<br/>        #判定是否已登录,若未登录,则执行登录操作<br/>        name = &#x27;投标操作&#x27;<br/>&gt;       if  IndexPage(init_toast_keep,init_session,name).visiable_login_btn():<br/><span class="error">E       NameError: name &#x27;init_toast_keep&#x27; is not defined</span><br/><br/>TestCases\test_1_invest.py:64: NameError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestLogin::test_login_success[testdatas0]</td>
+          <td class="col-duration">15.94</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;PageObjects.bottom_widget.BottomWidget object at 0x000002BCEA9D29A0&gt;, loc = (&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;), timeout = 20<br/>poll_frequency = 0.5<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.5):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>&gt;           WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))<br/><br/>Common\basepage.py:36: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.wait.WebDriverWait (session=&quot;a0da413d-5f27-49c9-9945-4e9e5671fcc6&quot;)&gt;<br/>method = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000002BCEA9D26A0&gt;, message = &#x27;&#x27;<br/><br/>    def until(self, method, message=&#x27;&#x27;):<br/>        &quot;&quot;&quot;Calls the method provided with the driver as an argument until the \<br/>        return value is not False.&quot;&quot;&quot;<br/>        screen = None<br/>        stacktrace = None<br/>    <br/>        end_time = time.time() + self._timeout<br/>        while True:<br/>            try:<br/>&gt;               value = method(self._driver)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py:71: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000002BCEA9D26A0&gt;<br/>driver = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;a0da413d-5f27-49c9-9945-4e9e5671fcc6&quot;)&gt;<br/><br/>    def __call__(self, driver):<br/>        try:<br/>&gt;           return _element_if_visible(_find_element(driver, self.locator))<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py:128: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>driver = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;a0da413d-5f27-49c9-9945-4e9e5671fcc6&quot;)&gt;, by = (&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)<br/><br/>    def _find_element(driver, by):<br/>        &quot;&quot;&quot;Looks up an element. Logs and re-raises ``WebDriverException``<br/>        if thrown.&quot;&quot;&quot;<br/>        try:<br/>            return driver.find_element(*by)<br/>        except NoSuchElementException as e:<br/>            raise e<br/>        except WebDriverException as e:<br/>&gt;           raise e<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py:415: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>driver = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;a0da413d-5f27-49c9-9945-4e9e5671fcc6&quot;)&gt;, by = (&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)<br/><br/>    def _find_element(driver, by):<br/>        &quot;&quot;&quot;Looks up an element. Logs and re-raises ``WebDriverException``<br/>        if thrown.&quot;&quot;&quot;<br/>        try:<br/>&gt;           return driver.find_element(*by)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py:411: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;a0da413d-5f27-49c9-9945-4e9e5671fcc6&quot;)&gt;, by = &#x27;-android uiautomator&#x27;, value = &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;<br/><br/>    def find_element(self, by=By.ID, value=None):<br/>        &quot;&quot;&quot;&#x27;Private&#x27; method used by the find_element_by_* methods.<br/>    <br/>        Override for Appium<br/>    <br/>        Usage:<br/>            Use the corresponding find_element_by_* instead of this.<br/>    <br/>        Returns:<br/>            `appium.webdriver.webelement.WebElement`<br/>    <br/>        :rtype: `MobileWebElement`<br/>        &quot;&quot;&quot;<br/>        # TODO: If we need, we should enable below converter for Web context<br/>        # if self.w3c:<br/>        #     if by == By.ID:<br/>        #         by = By.CSS_SELECTOR<br/>        #         value = &#x27;[id=&quot;%s&quot;]&#x27; % value<br/>        #     elif by == By.TAG_NAME:<br/>        #         by = By.CSS_SELECTOR<br/>        #     elif by == By.CLASS_NAME:<br/>        #         by = By.CSS_SELECTOR<br/>        #         value = &quot;.%s&quot; % value<br/>        #     elif by == By.NAME:<br/>        #         by = By.CSS_SELECTOR<br/>        #         value = &#x27;[name=&quot;%s&quot;]&#x27; % value<br/>    <br/>&gt;       return self.execute(RemoteCommand.FIND_ELEMENT, {<br/>            &#x27;using&#x27;: by,<br/>            &#x27;value&#x27;: value})[&#x27;value&#x27;]<br/><br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py:282: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;a0da413d-5f27-49c9-9945-4e9e5671fcc6&quot;)&gt;, driver_command = &#x27;findElement&#x27;<br/>params = {&#x27;using&#x27;: &#x27;-android uiautomator&#x27;, &#x27;value&#x27;: &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;}<br/><br/>    def execute(self, driver_command, params=None):<br/>        &quot;&quot;&quot;<br/>        Sends a command to be executed by a command.CommandExecutor.<br/>    <br/>        :Args:<br/>         - driver_command: The name of the command to execute as a string.<br/>         - params: A dictionary of named parameters to send with the command.<br/>    <br/>        :Returns:<br/>          The command&#x27;s JSON response loaded into a dictionary object.<br/>        &quot;&quot;&quot;<br/>        if self.session_id is not None:<br/>            if not params:<br/>                params = {&#x27;sessionId&#x27;: self.session_id}<br/>            elif &#x27;sessionId&#x27; not in params:<br/>                params[&#x27;sessionId&#x27;] = self.session_id<br/>    <br/>        params = self._wrap_value(params)<br/>        response = self.command_executor.execute(driver_command, params)<br/>        if response:<br/>&gt;           self.error_handler.check_response(response)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:321: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000002BCEA9D22B0&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        try:<br/>            super(MobileErrorHandler, self).check_response(response)<br/>        except WebDriverException as wde:<br/>            if wde.msg == &#x27;No such context found.&#x27;:<br/>                raise NoSuchContextException(wde.msg, wde.screen, wde.stacktrace)<br/>            else:<br/>&gt;               raise wde<br/><br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000002BCEA9D22B0&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        try:<br/>&gt;           super(MobileErrorHandler, self).check_response(response)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:24: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000002BCEA9D22B0&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if status is None or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, basestring):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if status is None:<br/>                        status = value[&quot;status&quot;]<br/>                        message = value[&quot;value&quot;]<br/>                        if not isinstance(message, basestring):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class = ErrorInResponseException<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if value == &#x27;&#x27; or value is None:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, basestring):<br/>            if exception_class == ErrorInResponseException:<br/>                raise exception_class(response, value)<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        if &#x27;stackTrace&#x27; in value and value[&#x27;stackTrace&#x27;]:<br/>            stacktrace = []<br/>            try:<br/>                for frame in value[&#x27;stackTrace&#x27;]:<br/>                    line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                    file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if line:<br/>                        file = &quot;%s:%s&quot; % (file, line)<br/>                    meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if &#x27;className&#x27; in frame:<br/>                        meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                    msg = &quot;    at %s (%s)&quot;<br/>                    msg = msg % (meth, file)<br/>                    stacktrace.append(msg)<br/>            except TypeError:<br/>                pass<br/>        if exception_class == ErrorInResponseException:<br/>            raise exception_class(response, message)<br/>        elif exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py:242: WebDriverException<br/><br/>During handling of the above exception, another exception occurred:<br/><br/>self = &lt;TestCases.test_0_login.TestLogin object at 0x000002BCEA98FD60&gt;, init_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;a0da413d-5f27-49c9-9945-4e9e5671fcc6&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;pwd&#x27;: &#x27;python&#x27;, &#x27;tele&#x27;: 18684720553}<br/><br/>    @pytest.mark.test1<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;login_success&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_keep&#x27;)<br/>    def test_login_success(self,init_keep,init_session,testdatas):<br/>        init_session.info(&#x27;成功登录用例&#x27;)<br/>        name = &#x27;成功登录&#x27;<br/>        BottomWidget(init_keep,init_session,name).switch_bottom_widget(&#x27;我&#x27;)<br/>        LoginPage(init_keep,init_session,name).input_tele(testdatas[&#x27;tele&#x27;])<br/>        LoginPage(init_keep,init_session,name).input_pwd(testdatas[&#x27;pwd&#x27;])<br/>        time.sleep(2)<br/>        UserPage(init_keep,init_session,name).click_popbox_btn_later()<br/>        time.sleep(2)<br/>&gt;       BottomWidget(init_keep,init_session,name).switch_bottom_widget(&#x27;首页&#x27;)<br/><br/>TestCases\test_0_login.py:56: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>PageObjects\bottom_widget.py:17: in switch_bottom_widget<br/>    self.visiable_ele(loc)<br/>Common\basepage.py:40: in visiable_ele<br/>    self.imgs_screenshot()<br/>Common\basepage.py:122: in imgs_screenshot<br/>    raise e<br/>Common\basepage.py:118: in imgs_screenshot<br/>    self.driver.save_screenshot(pic_path)<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1055: in save_screenshot<br/>    return self.get_screenshot_as_file(filename)<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1032: in get_screenshot_as_file<br/>    png = self.get_screenshot_as_png()<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1064: in get_screenshot_as_png<br/>    return base64.b64decode(self.get_screenshot_as_base64().encode(&#x27;ascii&#x27;))<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1074: in get_screenshot_as_base64<br/>    return self.execute(Command.SCREENSHOT)[&#x27;value&#x27;]<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:321: in execute<br/>    self.error_handler.check_response(response)<br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:29: in check_response<br/>    raise wde<br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:24: in check_response<br/>    super(MobileErrorHandler, self).check_response(response)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000002BCEA9D22B0&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if status is None or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, basestring):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if status is None:<br/>                        status = value[&quot;status&quot;]<br/>                        message = value[&quot;value&quot;]<br/>                        if not isinstance(message, basestring):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class = ErrorInResponseException<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if value == &#x27;&#x27; or value is None:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, basestring):<br/>            if exception_class == ErrorInResponseException:<br/>                raise exception_class(response, value)<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        if &#x27;stackTrace&#x27; in value and value[&#x27;stackTrace&#x27;]:<br/>            stacktrace = []<br/>            try:<br/>                for frame in value[&#x27;stackTrace&#x27;]:<br/>                    line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                    file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if line:<br/>                        file = &quot;%s:%s&quot; % (file, line)<br/>                    meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if &#x27;className&#x27; in frame:<br/>                        meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                    msg = &quot;    at %s (%s)&quot;<br/>                    msg = msg % (meth, file)<br/>                    stacktrace.append(msg)<br/>            except TypeError:<br/>                pass<br/>        if exception_class == ErrorInResponseException:<br/>            raise exception_class(response, message)<br/>        elif exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py:242: WebDriverException<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:48 成功登录用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时1.805941104888916s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时0.06441664695739746s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.9167377948760986s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.042983293533325195s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)成功输入18684720553
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.832744836807251s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)查找成功，耗时1.8381102085113525s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)查找成功，耗时0.03806424140930176s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)成功输入python
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.8208129405975342s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_cancel&#x27;)查找成功，耗时2.8509037494659424s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_cancel&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_cancel&#x27;)成功点击!
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[31m[1mERROR   [0m root:basepage.py:121 截图失败!
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py&quot;, line 71, in until
+    value = method(self._driver)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py&quot;, line 128, in __call__
+    return _element_if_visible(_find_element(driver, self.locator))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py&quot;, line 415, in _find_element
+    raise e
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py&quot;, line 411, in _find_element
+    return driver.find_element(*by)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py&quot;, line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 321, in execute
+    self.error_handler.check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 29, in check_response
+    raise wde
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py&quot;, line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 118, in imgs_screenshot
+    self.driver.save_screenshot(pic_path)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1055, in save_screenshot
+    return self.get_screenshot_as_file(filename)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1032, in get_screenshot_as_file
+    png = self.get_screenshot_as_png()
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1064, in get_screenshot_as_png
+    return base64.b64decode(self.get_screenshot_as_base64().encode(&#x27;ascii&#x27;))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1074, in get_screenshot_as_base64
+    return self.execute(Command.SCREENSHOT)[&#x27;value&#x27;]
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 321, in execute
+    self.error_handler.check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 29, in check_response
+    raise wde
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py&quot;, line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_0_login.py::TestLogin::test_prepare</td>
+          <td class="col-duration">5.05</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log setup------------------------------- <br/>[32mINFO    [0m root:conftest.py:65 xxxxxxx<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.9069621562957764s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.08295941352844238s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:test_0_login.py:22 app未登录,开始执行用例!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_0_login.py::TestLogin::test_login_success[testdatas0]</td>
+          <td class="col-duration">21.53</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:48 成功登录用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时2.3756585121154785s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时0.07091856002807617s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.42444300651550293s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.3884460926055908s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)成功输入18684720553
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.808976411819458s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)查找成功，耗时1.7673978805541992s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)查找成功，耗时0.033184051513671875s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:73 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_pwd&#x27;)成功输入python
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.8527870178222656s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_cancel&#x27;)查找成功，耗时2.8225486278533936s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_cancel&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_cancel&#x27;)成功点击!
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.6007046699523926s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.6529197692871094s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.06633782386779785s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.048799991607666016s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:test_0_login.py:59 确认登录成功!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestLogin::test_prepare</td>
+          <td class="col-duration">6.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.83986496925354s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.06537437438964844s
+[32mINFO    [0m root:basepage.py:48 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:94 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:test_0_login.py:22 app未登录,开始执行用例!<br/></div></td></tr></tbody></table></body></html>

@@ -1,0 +1,16 @@
+{"pytest_version": "5.2.0", "$report_type": "SessionStart"}
+{"nodeid": "", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Caps/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Common/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PageLocators/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PageObjects/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py::TestLogin", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py::TestLogin", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_1_invest.py::TestInvest", "outcome": "failed", "longrepr": "In test_invest_success: function uses no argument 'testdatas'", "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_1_invest.py::TestInvest", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_1_invest.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestDatas/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"exitstatus": 2, "$report_type": "SessionFinish"}

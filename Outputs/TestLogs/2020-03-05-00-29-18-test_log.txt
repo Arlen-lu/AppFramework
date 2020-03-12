@@ -1,0 +1,14 @@
+{"pytest_version": "5.2.0", "$report_type": "SessionStart"}
+{"nodeid": "", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Caps/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Common/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PageLocators/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PageObjects/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py::TestLogin", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py::TestLogin", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_1_invest.py", "outcome": "failed", "longrepr": {"reprcrash": {"path": "D:\\python\\mystudy\\AppFramework\\TestCases\\test_1_invest.py", "lineno": 7, "message": "NameError: name 'pytest' is not defined"}, "reprtraceback": {"reprentries": [{"type": "ReprEntry", "data": {"lines": ["    @pytest.mark.test", "E   NameError: name 'pytest' is not defined"], "reprfuncargs": null, "reprlocals": null, "reprfileloc": {"path": "TestCases\\test_1_invest.py", "lineno": 7, "message": "in <module>"}, "style": "short"}}], "extraline": null, "style": "short"}, "sections": [], "chain": [[{"reprentries": [{"type": "ReprEntry", "data": {"lines": ["    @pytest.mark.test", "E   NameError: name 'pytest' is not defined"], "reprfuncargs": null, "reprlocals": null, "reprfileloc": {"path": "TestCases\\test_1_invest.py", "lineno": 7, "message": "in <module>"}, "style": "short"}}], "extraline": null, "style": "short"}, {"path": "D:\\python\\mystudy\\AppFramework\\TestCases\\test_1_invest.py", "lineno": 7, "message": "NameError: name 'pytest' is not defined"}, null]]}, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestDatas/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"exitstatus": 2, "$report_type": "SessionFinish"}

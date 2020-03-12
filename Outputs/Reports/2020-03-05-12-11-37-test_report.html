@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function find_all(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sort_column(elem) {
+    toggle_sort_states(elem);
+    var colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    var key;
+    if (elem.classList.contains('numeric')) {
+        key = key_num;
+    } else if (elem.classList.contains('result')) {
+        key = key_result;
+    } else {
+        key = key_alpha;
+    }
+    sort_table(elem, key(colIndex));
+}
+
+function show_all_extras() {
+    find_all('.col-result').forEach(show_extras);
+}
+
+function hide_all_extras() {
+    find_all('.col-result').forEach(hide_extras);
+}
+
+function show_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.remove("collapsed");
+    expandcollapse.classList.remove("expander");
+    expandcollapse.classList.add("collapser");
+}
+
+function hide_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.add("collapsed");
+    expandcollapse.classList.remove("collapser");
+    expandcollapse.classList.add("expander");
+}
+
+function show_filters() {
+    var filter_items = document.getElementsByClassName('filter');
+    for (var i = 0; i < filter_items.length; i++)
+        filter_items[i].hidden = false;
+}
+
+function add_collapse() {
+    // Add links for show/hide all
+    var resulttable = find('table#results-table');
+    var showhideall = document.createElement("p");
+    showhideall.innerHTML = '<a href="javascript:show_all_extras()">Show all details</a> / ' +
+                            '<a href="javascript:hide_all_extras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    find_all('.col-result').forEach(function(elem) {
+        var collapsed = get_query_parameter('collapsed') || 'Passed';
+        var extras = elem.parentNode.nextElementSibling;
+        var expandcollapse = document.createElement("span");
+        if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add("collapsed");
+            expandcollapse.classList.add("expander");
+        } else {
+            expandcollapse.classList.add("collapser");
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener("click", function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains("collapsed")) {
+                show_extras(event.currentTarget);
+            } else {
+                hide_extras(event.currentTarget);
+            }
+        });
+    })
+}
+
+function get_query_parameter(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () {
+    reset_sort_headers();
+
+    add_collapse();
+
+    show_filters();
+
+    sort_column(find('.initial-sort'));
+
+    find_all('.sortable').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  sort_column(elem);
+                              }, false)
+    });
+
+};
+
+function sort_table(clicked, key_func) {
+    var rows = find_all('.results-table-row');
+    var reversed = !clicked.classList.contains('asc');
+    var sorted_rows = sort(rows, key_func, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    var thead = document.getElementById("results-table-head");
+    document.getElementById('results-table').remove();
+    var parent = document.createElement("table");
+    parent.id = "results-table";
+    parent.appendChild(thead);
+    sorted_rows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName("BODY")[0].appendChild(parent);
+}
+
+function sort(items, key_func, reversed) {
+    var sort_array = items.map(function(item, i) {
+        return [key_func(item), i];
+    });
+
+    sort_array.sort(function(a, b) {
+        var key_a = a[0];
+        var key_b = b[0];
+
+        if (key_a == key_b) return 0;
+
+        if (reversed) {
+            return (key_a < key_b ? 1 : -1);
+        } else {
+            return (key_a > key_b ? 1 : -1);
+        }
+    });
+
+    return sort_array.map(function(item) {
+        var index = item[1];
+        return items[index];
+    });
+}
+
+function key_alpha(col_index) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[col_index].firstChild.data.toLowerCase();
+    };
+}
+
+function key_num(col_index) {
+    return function(elem) {
+        return parseFloat(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function key_result(col_index) {
+    return function(elem) {
+        var strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+                       'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function reset_sort_headers() {
+    find_all('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    find_all('.sortable').forEach(function(elem) {
+        var icon = document.createElement("div");
+        icon.className = "sort-icon";
+        icon.textContent = "vvv";
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove("desc", "active");
+        elem.classList.add("asc", "inactive");
+    });
+}
+
+function toggle_sort_states(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        reset_sort_headers();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function is_all_rows_hidden(value) {
+  return value.hidden == false;
+}
+
+function filter_table(elem) {
+    var outcome_att = "data-test-result";
+    var outcome = elem.getAttribute(outcome_att);
+    class_outcome = outcome + " results-table-row";
+    var outcome_rows = document.getElementsByClassName(class_outcome);
+
+    for(var i = 0; i < outcome_rows.length; i++){
+        outcome_rows[i].hidden = !elem.checked;
+    }
+
+    var rows = find_all('.results-table-row').filter(is_all_rows_hidden);
+    var all_rows_hidden = rows.length == 0 ? true : false;
+    var not_found_message = document.getElementById("not-found-message");
+    not_found_message.hidden = !all_rows_hidden;
+}
+</script>
+    <h1>2020-03-05-12-11-37-test_report.html</h1>
+    <p>Report generated on 05-Mar-2020 at 12:14:58 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v2.0.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>JAVA_HOME</td>
+        <td>D:\Program Files (x86)\Java\jdk1.8.0_161</td></tr>
+      <tr>
+        <td>Packages</td>
+        <td>{&apos;pytest&apos;: &apos;5.2.0&apos;, &apos;py&apos;: &apos;1.8.1&apos;, &apos;pluggy&apos;: &apos;0.13.1&apos;}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.17763-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{&apos;allure-pytest&apos;: &apos;2.8.10&apos;, &apos;html&apos;: &apos;2.0.1&apos;, &apos;metadata&apos;: &apos;1.8.0&apos;, &apos;ordering&apos;: &apos;0.6&apos;, &apos;reportlog&apos;: &apos;0.1.0&apos;, &apos;rerunfailures&apos;: &apos;8.0&apos;}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.9.0a3</td></tr></table>
+    <h2>Summary</h2>
+    <p>7 tests ran in 200.51 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">6 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">1 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>, <input checked="true" class="filter" data-test-result="rerun" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="rerun">0 rerun</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable numeric" col="duration">Duration</th>
+          <th>Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="error results-table-row">
+        <tr>
+          <td class="col-result">Error</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestLogin::test_prepare::setup</td>
+          <td class="col-duration">34.91</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">@pytest.fixture()<br/>    def init_reset():<br/>&gt;       driver = base_driver(automationName=None,noReset=False)<br/><br/>TestCases\conftest.py:71: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>TestCases\conftest.py:37: in base_driver<br/>    driver = webdriver.Remote(&quot;http://127.0.0.1:{}/wd/hub&quot;.format(server_port),descired_caps)<br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py:147: in __init__<br/>    super(WebDriver, self).__init__(<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:157: in __init__<br/>    self.start_session(capabilities, browser_profile)<br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py:227: in start_session<br/>    response = self.execute(RemoteCommand.NEW_SESSION, parameters)<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:321: in execute<br/>    self.error_handler.check_response(response)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x000001AE16299910&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...iver\\\\lib\\\\protocol\\\\protocol.js:388:37)\\n    at process._tickCallback (internal/process/next_tick.js:68:7)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if status is None or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, basestring):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if status is None:<br/>                        status = value[&quot;status&quot;]<br/>                        message = value[&quot;value&quot;]<br/>                        if not isinstance(message, basestring):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class = ErrorInResponseException<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if value == &#x27;&#x27; or value is None:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, basestring):<br/>            if exception_class == ErrorInResponseException:<br/>                raise exception_class(response, value)<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        if &#x27;stackTrace&#x27; in value and value[&#x27;stackTrace&#x27;]:<br/>            stacktrace = []<br/>            try:<br/>                for frame in value[&#x27;stackTrace&#x27;]:<br/>                    line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                    file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if line:<br/>                        file = &quot;%s:%s&quot; % (file, line)<br/>                    meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if &#x27;className&#x27; in frame:<br/>                        meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                    msg = &quot;    at %s (%s)&quot;<br/>                    msg = msg % (meth, file)<br/>                    stacktrace.append(msg)<br/>            except TypeError:<br/>                pass<br/>        if exception_class == ErrorInResponseException:<br/>            raise exception_class(response, message)<br/>        elif exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Cannot start the &#x27;com.xxzb.fenwoo&#x27; application. Visit https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md for troubleshooting. Original error: Error executing adbExec. Original error: &#x27;Command &#x27;&#x27;D:\\Program Files (x86)\\android-sdk\\android-sdk-windows\\platform-tools\\adb.exe&#x27; -P 5037 -s 192.168.215.104\:5555 shell am start -W -n com.xxzb.fenwoo/com.xxzb.fenwoo.activity.addition.WelcomeActivity -S&#x27; timed out after 20000ms&#x27;. Try to increase the 20000ms adb execution timeout represented by &#x27;adbExecTimeout&#x27; capability</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py:242: WebDriverException<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestLogin::test_login_tele_wrong[testdatas0]</td>
+          <td class="col-duration">0.08</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;PageObjects.bottom_widget.BottomWidget object at 0x000001AE16B921C0&gt;, loc = (&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;), timeout = 20<br/>poll_frequency = 0.01<br/><br/>    def visiable_ele(self,loc,timeout = 20,poll_frequency=0.01):<br/>        &#x27;&#x27;&#x27;<br/>        - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote)<br/>        - timeout - Number of seconds before timing out<br/>        - poll_frequency - sleep interval between calls<br/>        &#x27;&#x27;&#x27;<br/>        try:<br/>            start_t = time.time()<br/>&gt;           WebDriverWait(self.driver,timeout=20,poll_frequency=0.01).until(EC.visibility_of_element_located(loc))<br/><br/>Common\basepage.py:36: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.wait.WebDriverWait (session=&quot;ea72a6b8-b7b2-4525-8241-8a1340e3cddd&quot;)&gt;<br/>method = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000001AE16B92100&gt;, message = &#x27;&#x27;<br/><br/>    def until(self, method, message=&#x27;&#x27;):<br/>        &quot;&quot;&quot;Calls the method provided with the driver as an argument until the \<br/>        return value is not False.&quot;&quot;&quot;<br/>        screen = None<br/>        stacktrace = None<br/>    <br/>        end_time = time.time() + self._timeout<br/>        while True:<br/>            try:<br/>&gt;               value = method(self._driver)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py:71: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.support.expected_conditions.visibility_of_element_located object at 0x000001AE16B92100&gt;<br/>driver = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ea72a6b8-b7b2-4525-8241-8a1340e3cddd&quot;)&gt;<br/><br/>    def __call__(self, driver):<br/>        try:<br/>&gt;           return _element_if_visible(_find_element(driver, self.locator))<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py:128: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>driver = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ea72a6b8-b7b2-4525-8241-8a1340e3cddd&quot;)&gt;, by = (&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)<br/><br/>    def _find_element(driver, by):<br/>        &quot;&quot;&quot;Looks up an element. Logs and re-raises ``WebDriverException``<br/>        if thrown.&quot;&quot;&quot;<br/>        try:<br/>            return driver.find_element(*by)<br/>        except NoSuchElementException as e:<br/>            raise e<br/>        except WebDriverException as e:<br/>&gt;           raise e<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py:415: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>driver = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ea72a6b8-b7b2-4525-8241-8a1340e3cddd&quot;)&gt;, by = (&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)<br/><br/>    def _find_element(driver, by):<br/>        &quot;&quot;&quot;Looks up an element. Logs and re-raises ``WebDriverException``<br/>        if thrown.&quot;&quot;&quot;<br/>        try:<br/>&gt;           return driver.find_element(*by)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py:411: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ea72a6b8-b7b2-4525-8241-8a1340e3cddd&quot;)&gt;, by = &#x27;-android uiautomator&#x27;, value = &#x27;new UiSelector().text(&quot;我&quot;)&#x27;<br/><br/>    def find_element(self, by=By.ID, value=None):<br/>        &quot;&quot;&quot;&#x27;Private&#x27; method used by the find_element_by_* methods.<br/>    <br/>        Override for Appium<br/>    <br/>        Usage:<br/>            Use the corresponding find_element_by_* instead of this.<br/>    <br/>        Returns:<br/>            `appium.webdriver.webelement.WebElement`<br/>    <br/>        :rtype: `MobileWebElement`<br/>        &quot;&quot;&quot;<br/>        # TODO: If we need, we should enable below converter for Web context<br/>        # if self.w3c:<br/>        #     if by == By.ID:<br/>        #         by = By.CSS_SELECTOR<br/>        #         value = &#x27;[id=&quot;%s&quot;]&#x27; % value<br/>        #     elif by == By.TAG_NAME:<br/>        #         by = By.CSS_SELECTOR<br/>        #     elif by == By.CLASS_NAME:<br/>        #         by = By.CSS_SELECTOR<br/>        #         value = &quot;.%s&quot; % value<br/>        #     elif by == By.NAME:<br/>        #         by = By.CSS_SELECTOR<br/>        #         value = &#x27;[name=&quot;%s&quot;]&#x27; % value<br/>    <br/>&gt;       return self.execute(RemoteCommand.FIND_ELEMENT, {<br/>            &#x27;using&#x27;: by,<br/>            &#x27;value&#x27;: value})[&#x27;value&#x27;]<br/><br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py:282: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ea72a6b8-b7b2-4525-8241-8a1340e3cddd&quot;)&gt;, driver_command = &#x27;findElement&#x27;<br/>params = {&#x27;using&#x27;: &#x27;-android uiautomator&#x27;, &#x27;value&#x27;: &#x27;new UiSelector().text(&quot;我&quot;)&#x27;}<br/><br/>    def execute(self, driver_command, params=None):<br/>        &quot;&quot;&quot;<br/>        Sends a command to be executed by a command.CommandExecutor.<br/>    <br/>        :Args:<br/>         - driver_command: The name of the command to execute as a string.<br/>         - params: A dictionary of named parameters to send with the command.<br/>    <br/>        :Returns:<br/>          The command&#x27;s JSON response loaded into a dictionary object.<br/>        &quot;&quot;&quot;<br/>        if self.session_id is not None:<br/>            if not params:<br/>                params = {&#x27;sessionId&#x27;: self.session_id}<br/>            elif &#x27;sessionId&#x27; not in params:<br/>                params[&#x27;sessionId&#x27;] = self.session_id<br/>    <br/>        params = self._wrap_value(params)<br/>        response = self.command_executor.execute(driver_command, params)<br/>        if response:<br/>&gt;           self.error_handler.check_response(response)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:321: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000001AE16B92160&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        try:<br/>            super(MobileErrorHandler, self).check_response(response)<br/>        except WebDriverException as wde:<br/>            if wde.msg == &#x27;No such context found.&#x27;:<br/>                raise NoSuchContextException(wde.msg, wde.screen, wde.stacktrace)<br/>            else:<br/>&gt;               raise wde<br/><br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000001AE16B92160&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        try:<br/>&gt;           super(MobileErrorHandler, self).check_response(response)<br/><br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:24: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000001AE16B92160&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if status is None or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, basestring):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if status is None:<br/>                        status = value[&quot;status&quot;]<br/>                        message = value[&quot;value&quot;]<br/>                        if not isinstance(message, basestring):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class = ErrorInResponseException<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if value == &#x27;&#x27; or value is None:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, basestring):<br/>            if exception_class == ErrorInResponseException:<br/>                raise exception_class(response, value)<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        if &#x27;stackTrace&#x27; in value and value[&#x27;stackTrace&#x27;]:<br/>            stacktrace = []<br/>            try:<br/>                for frame in value[&#x27;stackTrace&#x27;]:<br/>                    line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                    file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if line:<br/>                        file = &quot;%s:%s&quot; % (file, line)<br/>                    meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if &#x27;className&#x27; in frame:<br/>                        meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                    msg = &quot;    at %s (%s)&quot;<br/>                    msg = msg % (meth, file)<br/>                    stacktrace.append(msg)<br/>            except TypeError:<br/>                pass<br/>        if exception_class == ErrorInResponseException:<br/>            raise exception_class(response, message)<br/>        elif exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py:242: WebDriverException<br/><br/>During handling of the above exception, another exception occurred:<br/><br/>self = &lt;TestCases.test_0_login.TestLogin object at 0x000001AE16BABF40&gt;, init_keep = &lt;appium.webdriver.webdriver.WebDriver (session=&quot;ea72a6b8-b7b2-4525-8241-8a1340e3cddd&quot;)&gt;<br/>init_session = &lt;module &#x27;logging&#x27; from &#x27;D:\\Program Files (x86)\\python\\lib\\logging\\__init__.py&#x27;&gt;, testdatas = {&#x27;msg&#x27;: &#x27;无效的手机号&#x27;, &#x27;tele&#x27;: &#x27; &#x27;}<br/><br/>    @pytest.mark.test<br/>    @pytest.mark.parametrize(&#x27;testdatas&#x27;,GetTestDatas().get_testdatas()[&#x27;login_tele_wrong&#x27;])<br/>    @pytest.mark.usefixtures(&#x27;init_keep&#x27;)<br/>    def test_login_tele_wrong(self,init_keep,init_session,testdatas):<br/>        init_session.info(&#x27;手机号输入错误用例&#x27;)<br/>        name = &#x27;手机号输入错误&#x27;<br/>&gt;       BottomWidget(init_keep,init_session,name).switch_bottom_widget(&#x27;我&#x27;)<br/><br/>TestCases\test_0_login.py:32: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>PageObjects\bottom_widget.py:17: in switch_bottom_widget<br/>    self.visiable_ele(loc)<br/>Common\basepage.py:40: in visiable_ele<br/>    self.imgs_screenshot()<br/>Common\basepage.py:130: in imgs_screenshot<br/>    raise e<br/>Common\basepage.py:126: in imgs_screenshot<br/>    self.driver.save_screenshot(pic_path)<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1055: in save_screenshot<br/>    return self.get_screenshot_as_file(filename)<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1032: in get_screenshot_as_file<br/>    png = self.get_screenshot_as_png()<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1064: in get_screenshot_as_png<br/>    return base64.b64decode(self.get_screenshot_as_base64().encode(&#x27;ascii&#x27;))<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:1074: in get_screenshot_as_base64<br/>    return self.execute(Command.SCREENSHOT)[&#x27;value&#x27;]<br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py:321: in execute<br/>    self.error_handler.check_response(response)<br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:29: in check_response<br/>    raise wde<br/>D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py:24: in check_response<br/>    super(MobileErrorHandler, self).check_response(response)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;appium.webdriver.errorhandler.MobileErrorHandler object at 0x000001AE16B92160&gt;<br/>response = {&#x27;status&#x27;: 500, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;unknown error&quot;,&quot;message&quot;:&quot;An unknown server-side error occurred while pro...\\\\app\\\\node_modules\\\\appium\\\\node_modules\\\\appium-base-driver\\\\lib\\\\jsonwp-proxy\\\\proxy.js:261:13)&quot;}}&#x27;}<br/><br/>    def check_response(self, response):<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if status is None or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, basestring):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if status is None:<br/>                        status = value[&quot;status&quot;]<br/>                        message = value[&quot;value&quot;]<br/>                        if not isinstance(message, basestring):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class = ErrorInResponseException<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if value == &#x27;&#x27; or value is None:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, basestring):<br/>            if exception_class == ErrorInResponseException:<br/>                raise exception_class(response, value)<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        if &#x27;stackTrace&#x27; in value and value[&#x27;stackTrace&#x27;]:<br/>            stacktrace = []<br/>            try:<br/>                for frame in value[&#x27;stackTrace&#x27;]:<br/>                    line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                    file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if line:<br/>                        file = &quot;%s:%s&quot; % (file, line)<br/>                    meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if &#x27;className&#x27; in frame:<br/>                        meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                    msg = &quot;    at %s (%s)&quot;<br/>                    msg = msg % (meth, file)<br/>                    stacktrace.append(msg)<br/>            except TypeError:<br/>                pass<br/>        if exception_class == ErrorInResponseException:<br/>            raise exception_class(response, message)<br/>        elif exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up</span><br/><br/>D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py:242: WebDriverException<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:30 手机号输入错误用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[31m[1mERROR   [0m root:basepage.py:129 截图失败!
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.01).until(EC.visibility_of_element_located(loc))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py&quot;, line 71, in until
+    value = method(self._driver)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py&quot;, line 128, in __call__
+    return _element_if_visible(_find_element(driver, self.locator))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py&quot;, line 415, in _find_element
+    raise e
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\expected_conditions.py&quot;, line 411, in _find_element
+    return driver.find_element(*by)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\webdriver.py&quot;, line 282, in find_element
+    return self.execute(RemoteCommand.FIND_ELEMENT, {
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 321, in execute
+    self.error_handler.check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 29, in check_response
+    raise wde
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py&quot;, line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;d:\python\mystudy\AppFramework\Common\basepage.py&quot;, line 126, in imgs_screenshot
+    self.driver.save_screenshot(pic_path)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1055, in save_screenshot
+    return self.get_screenshot_as_file(filename)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1032, in get_screenshot_as_file
+    png = self.get_screenshot_as_png()
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1064, in get_screenshot_as_png
+    return base64.b64decode(self.get_screenshot_as_base64().encode(&#x27;ascii&#x27;))
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 1074, in get_screenshot_as_base64
+    return self.execute(Command.SCREENSHOT)[&#x27;value&#x27;]
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 321, in execute
+    self.error_handler.check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 29, in check_response
+    raise wde
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\appium\webdriver\errorhandler.py&quot;, line 24, in check_response
+    super(MobileErrorHandler, self).check_response(response)
+  File &quot;D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\errorhandler.py&quot;, line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_0_login.py::TestLogin::test_prepare</td>
+          <td class="col-duration">3.87</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log setup------------------------------- <br/>[32mINFO    [0m root:conftest.py:65 xxxxxxx<br/> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:bottom_widget.py:15 切换到页面首页
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.5692963600158691s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功，耗时0.06441497802734375s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;首页&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:test_0_login.py:22 app未登录,开始执行用例!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_0_login.py::TestLogin::test_login_tele_wrong[testdatas0]</td>
+          <td class="col-duration">7.87</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:30 手机号输入错误用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时1.6679837703704834s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时0.07027077674865723s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时1.24831223487854s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.04294276237487793s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:81 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)成功输入 
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.8256947994232178s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功，耗时0.07511377334594727s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:113 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)得text属性为无效的手机号
+[32mINFO    [0m root:test_0_login.py:37 Test Pass!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功，耗时0.0605466365814209s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)成功点击!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_0_login.py::TestLogin::test_login_tele_wrong[testdatas1]</td>
+          <td class="col-duration">8.38</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:30 手机号输入错误用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时2.6274311542510986s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时0.10735869407653809s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时1.0314481258392334s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.04294300079345703s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:81 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)成功输入15264
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.8764455318450928s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功，耗时0.03511190414428711s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:113 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)得text属性为无效的手机号
+[32mINFO    [0m root:test_0_login.py:37 Test Pass!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功，耗时0.04294323921203613s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)成功点击!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_0_login.py::TestLogin::test_login_tele_wrong[testdatas2]</td>
+          <td class="col-duration">7.85</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:30 手机号输入错误用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时2.0560050010681152s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时0.0751488208770752s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时1.0029432773590088s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.04977679252624512s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:81 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)成功输入99999999999
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.8535311222076416s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功，耗时0.07905840873718262s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:113 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)得text属性为无效的手机号
+[32mINFO    [0m root:test_0_login.py:37 Test Pass!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功，耗时0.05075550079345703s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)成功点击!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestLogin::test_login_tele_wrong[testdatas1]</td>
+          <td class="col-duration">8.48</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:30 手机号输入错误用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时2.212590217590332s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时0.09322905540466309s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.49513840675354004s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.04099273681640625s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:81 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)成功输入15264
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.8605430126190186s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功，耗时0.052953481674194336s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:113 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)得text属性为无效的手机号
+[32mINFO    [0m root:test_0_login.py:37 Test Pass!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功，耗时0.04930901527404785s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)成功点击!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">TestCases/test_1_invest.py::TestLogin::test_login_tele_wrong[testdatas2]</td>
+          <td class="col-duration">7.87</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>[32mINFO    [0m root:test_0_login.py:30 手机号输入错误用例
+[32mINFO    [0m root:bottom_widget.py:15 切换到页面我
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时1.9351084232330322s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功，耗时0.07222199440002441s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;-android uiautomator&#x27;, &#x27;new UiSelector().text(&quot;我&quot;)&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时1.117537498474121s
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功，耗时0.05465435981750488s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:81 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/et_phone&#x27;)成功输入99999999999
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功，耗时0.8007705211639404s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_next_step&#x27;)成功点击!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功，耗时0.03803396224975586s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:113 获取元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/tv_message&#x27;)得text属性为无效的手机号
+[32mINFO    [0m root:test_0_login.py:37 Test Pass!
+[32mINFO    [0m root:basepage.py:38 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功，耗时0.04001784324645996s
+[32mINFO    [0m root:basepage.py:56 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)查找成功！
+[32mINFO    [0m root:basepage.py:102 元素(&#x27;id&#x27;, &#x27;com.xxzb.fenwoo:id/btn_confirm&#x27;)成功点击!<br/></div></td></tr></tbody></table></body></html>

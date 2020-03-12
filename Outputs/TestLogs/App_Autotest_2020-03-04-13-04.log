@@ -1,0 +1,28 @@
+ Wed, 04 Mar 2020 13:04:10  INFO logger.py <module> [ line:20 ] hehehehe
+ Wed, 04 Mar 2020 13:04:10  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Wed, 04 Mar 2020 13:04:10  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Wed, 04 Mar 2020 13:04:25  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_login')查找成功，耗时0.545968770980835s
+ Wed, 04 Mar 2020 13:04:25  INFO test_0_login.py test_prepare [ line:19 ] app已登录,执行数据清空操作!
+ Wed, 04 Mar 2020 13:05:13  INFO test_0_login.py test_login_tele_wrong [ line:27 ] 手机号输入错误用例
+ Wed, 04 Mar 2020 13:05:13  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Wed, 04 Mar 2020 13:05:13  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.576519250869751s
+ Wed, 04 Mar 2020 13:05:13  INFO basepage.py get_ele [ line:47 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Wed, 04 Mar 2020 13:05:14  INFO basepage.py click_ele [ line:80 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Wed, 04 Mar 2020 13:05:15  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功，耗时0.5143523216247559s
+ Wed, 04 Mar 2020 13:05:15  INFO basepage.py get_ele [ line:47 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')查找成功！
+ Wed, 04 Mar 2020 13:05:16  INFO basepage.py imgs_screenshot [ line:105 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\手机号输入错误-2020-03-04-13-05-15.png
+ Wed, 04 Mar 2020 13:05:16  ERROR basepage.py input_ele_text [ line:62 ] 元素('id', 'com.xxzb.fenwoo:id/et_phone')输入值None失败！
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 58, in input_ele_text
+    ele.send_keys(value)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\webelement.py", line 473, in send_keys
+    local_file = self.parent.file_detector.is_local_file(*value)
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\remote\file_detector.py", line 48, in is_local_file
+    file_path = ''.join(keys_to_typing(keys))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\common\utils.py", line 150, in keys_to_typing
+    for i in range(len(val)):
+TypeError: object of type 'NoneType' has no len()

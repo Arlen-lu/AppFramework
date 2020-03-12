@@ -1,0 +1,9 @@
+ Wed, 04 Mar 2020 13:35:49  INFO logger.py <module> [ line:20 ] hehehehe
+ Wed, 04 Mar 2020 13:35:49  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Wed, 04 Mar 2020 13:35:50  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Wed, 04 Mar 2020 13:36:05  INFO basepage.py visiable_ele [ line:38 ] 元素('id', 'com.xxzb.fenwoo:id/btn_login')查找成功，耗时0.535346508026123s
+ Wed, 04 Mar 2020 13:36:05  INFO test_0_login.py test_prepare [ line:20 ] app已登录,执行数据清空操作!

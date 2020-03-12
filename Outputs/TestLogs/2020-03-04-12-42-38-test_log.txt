@@ -1,0 +1,11 @@
+{"pytest_version": "5.2.0", "$report_type": "SessionStart"}
+{"nodeid": "", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Caps/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "Common/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PageObjects/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "PaggeLocators/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/test_0_login.py", "outcome": "failed", "longrepr": "ImportError while importing test module 'D:\\python\\mystudy\\AppFramework\\TestCases\\test_0_login.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nTestCases\\test_0_login.py:8: in <module>\n    from TestDatas.gettestdatas.GetTestDatas import get_testdatas\nE   ModuleNotFoundError: No module named 'TestDatas.gettestdatas.GetTestDatas'; 'TestDatas.gettestdatas' is not a package", "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestCases/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"nodeid": "TestDatas/__init__.py", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "_report_type": "CollectReport"}
+{"exitstatus": 2, "$report_type": "SessionFinish"}

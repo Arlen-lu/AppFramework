@@ -1,0 +1,13 @@
+ Thu, 05 Mar 2020 00:30:47  INFO logger.py <module> [ line:20 ] hehehehe
+ Thu, 05 Mar 2020 00:30:47  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Thu, 05 Mar 2020 00:30:47  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Thu, 05 Mar 2020 00:31:04  INFO bottom_widget.py switch_bottom_widget [ line:15 ] 切换到页面我
+ Thu, 05 Mar 2020 00:31:06  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时1.284390926361084s
+ Thu, 05 Mar 2020 00:31:06  INFO basepage.py visiable_ele [ line:38 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功，耗时0.11028742790222168s
+ Thu, 05 Mar 2020 00:31:06  INFO basepage.py get_ele [ line:48 ] 元素('-android uiautomator', 'new UiSelector().text("我")')查找成功！
+ Thu, 05 Mar 2020 00:31:06  INFO basepage.py click_ele [ line:94 ] 元素('-android uiautomator', 'new UiSelector().text("我")')成功点击!
+ Thu, 05 Mar 2020 00:31:06  INFO test_0_login.py test_prepare [ line:22 ] app已登录,执行数据清空操作!

@@ -1,0 +1,17 @@
+ Wed, 04 Mar 2020 17:30:40  INFO logger.py <module> [ line:20 ] hehehehe
+ Wed, 04 Mar 2020 17:30:40  ERROR logger.py <module> [ line:21 ] heheheheheheh
+Traceback (most recent call last):
+  File "D:\Program Files (x86)\python\lib\site-packages\_pytest\config\__init__.py", line 456, in _importconftest
+    return self._conftestpath2mod[key]
+KeyError: WindowsPath('D:/python/mystudy/AppFramework/TestCases/conftest.py')
+ Wed, 04 Mar 2020 17:30:40  INFO conftest.py init_session [ line:65 ] xxxxxxx
+ Wed, 04 Mar 2020 17:31:30  INFO basepage.py imgs_screenshot [ line:105 ] 截图成功，文件为D:\python\mystudy\AppFramework\Outputs\Screen_Shots\测试准备,确认app是否已登录-2020-03-04-17-31-30.png
+ Wed, 04 Mar 2020 17:31:30  ERROR basepage.py visiable_ele [ line:41 ] 元素('id', 'com.xxzb.fenwoo:id/btn_login')未找到
+Traceback (most recent call last):
+  File "d:\python\mystudy\AppFramework\Common\basepage.py", line 36, in visiable_ele
+    WebDriverWait(self.driver,timeout=20,poll_frequency=0.5).until(EC.visibility_of_element_located(loc))
+  File "D:\Program Files (x86)\python\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+ Wed, 04 Mar 2020 17:31:30  INFO test_0_login.py test_prepare [ line:21 ] app已登录,执行数据清空操作!
